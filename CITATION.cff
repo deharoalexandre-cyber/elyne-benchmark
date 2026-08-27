@@ -5,7 +5,7 @@ type: software
 version: 0.1.0
 date-released: 2026-08-28
 authors:
-  - family-names: "Deharo"
+  - family-names: "De Haro"
     given-names: "Alexandre"
 repository-code: "https://github.com/deharoalexandre-cyber/elyne-benchmark"
 license: "Apache-2.0"
