@@ -1,15 +1,22 @@
-Copyright (c) 2026 Elyne Corp / Alexandre
+Elyne Benchmark — dual-license notice
+=====================================
 
-PRE-PUBLICATION NOTICE
+Copyright 2026 Alexandre Deharo / Elyne Corp
 
-No open-source or data license has yet been granted for this repository. All
-rights are reserved until the owner selects and installs the final license.
+Software is licensed under the Apache License, Version 2.0.
+This includes Python source code, adapters, scripts, tests, workflow files,
+configuration files, JSON schemas, and packaging metadata. The complete terms
+are in LICENSES/Apache-2.0.txt.
 
-Before public release, choose explicit terms for both:
+Benchmark and documentation material is licensed under the Creative Commons
+Attribution 4.0 International license (CC BY 4.0). This includes catalogues,
+batteries, reference reports, public evidence, and Markdown documentation.
+The complete terms are in LICENSES/CC-BY-4.0.txt.
 
-1. harness and adapter source code; and
-2. benchmark fixtures, reports, and evidence data.
+Attribution for CC BY 4.0 material:
 
-This notice prevents an accidental license grant while the publication package
-is being reviewed. It is not the intended final public license.
+  "Elyne Benchmark", Alexandre Deharo / Elyne Corp, 2026,
+  https://github.com/deharoalexandre-cyber/elyne-benchmark
+
+The Elyne and Elyne Corp names and marks are not licensed as trademarks.
 

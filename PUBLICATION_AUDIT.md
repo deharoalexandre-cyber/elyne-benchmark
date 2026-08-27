@@ -24,5 +24,4 @@ Excluded:
 
 The selected reports refer only to copied public JSON evidence. The verifier rejects missing or modified evidence. Where a public report commits to a source or matcher, the corresponding exact file is present.
 
-Before pushing, the owner should still review the case text and recorded model responses for disclosure and select a license. This repository has not been uploaded automatically.
-
+The publication package was scanned for local paths, credentials, API keys, email addresses, and unintended private names before release. The approved dual-license boundary is recorded in [LICENSE](LICENSE).

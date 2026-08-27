@@ -86,7 +86,6 @@ Outputs are written under `runs/local/` and are never silently overwritten.
 - [LIMITATIONS.md](LIMITATIONS.md): what the evidence does and does not establish.
 - [PUBLICATION_AUDIT.md](PUBLICATION_AUDIT.md): what was deliberately excluded from this public artifact.
 
-## Publication status
+## License and citation
 
-This directory is locally prepared and reproducible, but has not been pushed to a public forge. The owner must select the final license before public release; see [LICENSE](LICENSE).
-
+Software is licensed under Apache-2.0. Benchmark batteries, reports, evidence, and documentation are licensed under CC-BY-4.0. See [LICENSE](LICENSE) for the exact scope and [CITATION.cff](CITATION.cff) for citation metadata.
