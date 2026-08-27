@@ -1,0 +1,9 @@
+{
+  "schema": "elyne.benchmark.adapter-config/v1",
+  "commands": {
+    "core-origin": ["python", "adapters/mock_adapter.py"],
+    "gemma-info": ["python", "adapters/mock_adapter.py"],
+    "gemma-nu": ["python", "adapters/mock_adapter.py"]
+  }
+}
+

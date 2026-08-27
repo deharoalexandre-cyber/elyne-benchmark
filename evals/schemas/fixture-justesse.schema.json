@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "elyne.eval.fixture-justesse/v1",
+  "title": "Batterie de justesse a trois bras : substrat, information et modele nu",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "revision", "status", "catalog", "source", "cases"],
+  "properties": {
+    "schema": {"const": "elyne.eval.fixture-justesse/v1"},
+    "id": {"const": "justesse"},
+    "revision": {"const": 1},
+    "status": {"enum": ["proposed", "accepted", "frozen"]},
+    "catalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "revision", "sha256"],
+      "properties": {
+        "id": {"const": "justesse"},
+        "revision": {"const": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["module", "sha256"],
+      "properties": {
+        "module": {"const": "elyne/bench/testset.py"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/case"}
+    }
+  },
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 65536},
+    "expectedMatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "value", "normalization", "case_sensitive"],
+      "properties": {
+        "mode": {"const": "contains"},
+        "value": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "normalization": {"const": "unicode-nfc-trim/v1"},
+        "case_sensitive": {"const": false}
+      }
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "text"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 512},
+        "text": {"$ref": "#/$defs/text"}
+      }
+    },
+    "priorExchange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["user", "assistant", "duration_seconds"],
+      "properties": {
+        "user": {"$ref": "#/$defs/text"},
+        "assistant": {"$ref": "#/$defs/text"},
+        "duration_seconds": {"type": "integer", "minimum": 0, "maximum": 604800}
+      }
+    },
+    "setup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "memories": {
+          "type": "array", "minItems": 1, "maxItems": 64,
+          "items": {"$ref": "#/$defs/text"}
+        },
+        "document": {"$ref": "#/$defs/document"},
+        "prior_exchange": {"$ref": "#/$defs/priorExchange"},
+        "absence_seconds": {"type": "integer", "minimum": 0, "maximum": 31536000}
+      },
+      "dependentRequired": {"absence_seconds": ["prior_exchange"]}
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "probe_id", "case_type", "timeout_seconds", "category", "prompt",
+        "just_signal", "substrate_should_help", "expected_match", "expects_tool",
+        "substrate_setup"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "probe_id": {"const": "justesse.answer"},
+        "case_type": {"enum": ["objective", "tool", "judge"]},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 3600},
+        "category": {"enum": ["memoire", "rag", "outils", "temps", "temoin"]},
+        "prompt": {"$ref": "#/$defs/text"},
+        "just_signal": {"$ref": "#/$defs/text"},
+        "substrate_should_help": {"type": "boolean"},
+        "expected_match": {
+          "oneOf": [{"$ref": "#/$defs/expectedMatch"}, {"type": "null"}]
+        },
+        "expects_tool": {
+          "oneOf": [{"$ref": "#/$defs/identifier"}, {"type": "null"}]
+        },
+        "substrate_setup": {"$ref": "#/$defs/setup"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"case_type": {"const": "objective"}}},
+          "then": {
+            "properties": {
+              "expected_match": {"$ref": "#/$defs/expectedMatch"},
+              "expects_tool": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"case_type": {"const": "tool"}}},
+          "then": {
+            "properties": {
+              "expected_match": {"$ref": "#/$defs/expectedMatch"},
+              "expects_tool": {"$ref": "#/$defs/identifier"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"case_type": {"const": "judge"}}},
+          "then": {
+            "properties": {
+              "expected_match": {"type": "null"},
+              "expects_tool": {"type": "null"}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "elyne.benchmark.adapter-config/v1",
+  "commands": {
+    "core-origin": ["python", "path/to/your_substrate_adapter.py"],
+    "gemma-info": ["python", "adapters/openai_compatible.py"],
+    "gemma-nu": ["python", "adapters/openai_compatible.py"]
+  }
+}
+

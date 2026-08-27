@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:elyne:eval:probe-catalog:v1",
+  "title": "Elyne SubjectProbePort catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "revision",
+    "status",
+    "fixture_schemas",
+    "isolation",
+    "probes"
+  ],
+  "properties": {
+    "schema": {"const": "elyne.eval.probe-catalog/v1"},
+    "id": {"$ref": "#/$defs/identifier"},
+    "revision": {"type": "integer", "minimum": 1},
+    "status": {"enum": ["proposed", "accepted", "frozen"]},
+    "fixture_schemas": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/fixtureSchema"}
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_access",
+        "snapshot_access",
+        "external_artifacts_access",
+        "work_dir_access",
+        "network_access",
+        "process_spawn"
+      ],
+      "properties": {
+        "source_access": {"enum": ["forbidden", "read-only"]},
+        "snapshot_access": {"const": "read-only"},
+        "external_artifacts_access": {"const": "read-only"},
+        "work_dir_access": {"const": "read-write"},
+        "network_access": {"enum": ["forbidden", "public-https-policy"]},
+        "process_spawn": {"const": "driver-owned-only"}
+      }
+    },
+    "probes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/probe"}
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+    },
+    "fixtureSchema": {
+      "type": "string",
+      "pattern": "^elyne\\.eval\\.fixture-[a-z][a-z0-9]*(?:-[a-z0-9]+)*/v[1-9][0-9]*$"
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "media_type", "required_when"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "media_type": {
+          "enum": ["application/json", "text/plain", "application/octet-stream"]
+        },
+        "required_when": {"enum": ["always", "completed"]}
+      }
+    },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "phase",
+        "handler_id",
+        "fixture_schema",
+        "case_types",
+        "timeout_seconds",
+        "evidence"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "phase": {"enum": ["prepared", "running"]},
+        "handler_id": {
+          "type": "string",
+          "pattern": "^probe-handler\\.[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"
+        },
+        "fixture_schema": {"$ref": "#/$defs/fixtureSchema"},
+        "case_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/identifier"}
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/evidence"}
+        }
+      }
+    }
+  }
+}

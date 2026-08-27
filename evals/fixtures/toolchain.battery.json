@@ -1,0 +1,822 @@
+{
+  "schema": "elyne.eval.fixture-toolchain/v1",
+  "id": "toolchain",
+  "revision": 1,
+  "status": "accepted",
+  "catalog": {
+    "id": "toolchain",
+    "revision": 1,
+    "sha256": "368613a0435cc158580bb7c62cebb02d027b2dcf9b3e40c156ac7d62a9a4782e"
+  },
+  "source": {
+    "module": "elyne/bench/toolchain_testset.py",
+    "sha256": "e3e25b59b87cfe048e0f28443854e554aa6d83e6d39553fff08b0d6904d4c1e6"
+  },
+  "matcher": {
+    "module": "evals/harness/toolchain_matcher.py",
+    "sha256": "56736f207a207dc04b5262996160c54d367be4e99f0d670adc700a3d61317260",
+    "schema": "elyne.eval.toolchain-matcher/v1"
+  },
+  "cases": [
+    {
+      "id": "tc-list-read-01",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "list-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Liste root_id=workspace, path=toolchain/tc-list-read-01, pattern=*.txt, recursive=false, limit=8. Le resultat du listing determine le second appel : le nom active--<NEXT_TOOL>--... donne l'outil 2 et son path. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-31BD55DE0B1E",
+      "expected_calls": [
+        {
+          "tool_id": "list_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-01",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 8
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-list-read-01/active--read_workspace_file--SEL-16BE981C2C75.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-list-read-01/active--read_workspace_file--SEL-16BE981C2C75.txt",
+          "text": "TARGET=TARGET-31BD55DE0B1E\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-01/archive-a.txt",
+          "text": "TARGET=TARGET-D6C994A08719\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-01/archive-b.txt",
+          "text": "TARGET=TARGET-D844DC0EDF54\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-01",
+            "pattern": "*.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-list-read-02",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "list-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Liste root_id=workspace, path=toolchain/tc-list-read-02, pattern=*.txt, recursive=false, limit=8. Le resultat du listing determine le second appel : le nom active--<NEXT_TOOL>--... donne l'outil 2 et son path. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-F5359059BFB7",
+      "expected_calls": [
+        {
+          "tool_id": "list_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-02",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 8
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-list-read-02/active--read_workspace_file--SEL-B875B78CCBCA.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-list-read-02/active--read_workspace_file--SEL-B875B78CCBCA.txt",
+          "text": "TARGET=TARGET-F5359059BFB7\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-02/archive-a.txt",
+          "text": "TARGET=TARGET-8A27F531DE89\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-02/archive-b.txt",
+          "text": "TARGET=TARGET-F16C1F3DD194\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-02",
+            "pattern": "*.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-list-read-03",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "list-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Liste root_id=workspace, path=toolchain/tc-list-read-03, pattern=*.txt, recursive=false, limit=8. Le resultat du listing determine le second appel : le nom active--<NEXT_TOOL>--... donne l'outil 2 et son path. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-236233C28061",
+      "expected_calls": [
+        {
+          "tool_id": "list_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-03",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 8
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-list-read-03/active--read_workspace_file--SEL-DB7ED3F146DB.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-list-read-03/active--read_workspace_file--SEL-DB7ED3F146DB.txt",
+          "text": "TARGET=TARGET-236233C28061\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-03/archive-a.txt",
+          "text": "TARGET=TARGET-BBE1BD950B3C\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-03/archive-b.txt",
+          "text": "TARGET=TARGET-631D7CB79299\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-03",
+            "pattern": "*.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-list-read-04",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "list-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Liste root_id=workspace, path=toolchain/tc-list-read-04, pattern=*.txt, recursive=false, limit=8. Le resultat du listing determine le second appel : le nom active--<NEXT_TOOL>--... donne l'outil 2 et son path. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-F6C97D441EA7",
+      "expected_calls": [
+        {
+          "tool_id": "list_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-04",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 8
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-list-read-04/active--read_workspace_file--SEL-F09B21C68A73.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-list-read-04/active--read_workspace_file--SEL-F09B21C68A73.txt",
+          "text": "TARGET=TARGET-F6C97D441EA7\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-04/archive-a.txt",
+          "text": "TARGET=TARGET-6F7426AB66F2\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-04/archive-b.txt",
+          "text": "TARGET=TARGET-C1F19A780EF1\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-04",
+            "pattern": "*.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-list-read-05",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "list-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Liste root_id=workspace, path=toolchain/tc-list-read-05, pattern=*.txt, recursive=false, limit=8. Le resultat du listing determine le second appel : le nom active--<NEXT_TOOL>--... donne l'outil 2 et son path. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-2336CCD86FAF",
+      "expected_calls": [
+        {
+          "tool_id": "list_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-05",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 8
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-list-read-05/active--read_workspace_file--SEL-80BC2347FDC8.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-list-read-05/active--read_workspace_file--SEL-80BC2347FDC8.txt",
+          "text": "TARGET=TARGET-2336CCD86FAF\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-05/archive-a.txt",
+          "text": "TARGET=TARGET-745769F4D34B\n"
+        },
+        {
+          "path": "toolchain/tc-list-read-05/archive-b.txt",
+          "text": "TARGET=TARGET-6D2D59453AD8\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-list-read-05",
+            "pattern": "*.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-route-docs-01",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "route-document",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Commence explicitement avec read_workspace_file, lie a root_id=workspace, avec path=toolchain/tc-route-docs-01/route.txt, offset=0 et max_characters=4096 (root_id n'est pas un argument de cet outil). Le champ NEXT_TOOL du resultat impose l'outil suivant et KEY impose sa requete (limit=1). N'invente aucune donnee. Apres les deux acquisitions, reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-B586294C5528",
+      "expected_calls": [
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-route-docs-01/route.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        },
+        {
+          "tool_id": "search_documents",
+          "arguments": {
+            "query": "KEY-5AB157FAA0FA",
+            "limit": 1
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-route-docs-01/route.txt",
+          "text": "NEXT_TOOL=search_documents\nKEY=KEY-5AB157FAA0FA\n"
+        }
+      ],
+      "planted_documents": [
+        {
+          "name": "tc-route-docs-01-target.txt",
+          "text": "KEY=KEY-5AB157FAA0FA\nTARGET=TARGET-B586294C5528\n"
+        },
+        {
+          "name": "tc-route-docs-01-distractor.txt",
+          "text": "KEY=KEY-DE9C02F0219B\nTARGET=TARGET-49EBD1F215D6\n"
+        }
+      ],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-route-docs-01/route.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-route-docs-02",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "route-document",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Commence explicitement avec read_workspace_file, lie a root_id=workspace, avec path=toolchain/tc-route-docs-02/route.txt, offset=0 et max_characters=4096 (root_id n'est pas un argument de cet outil). Le champ NEXT_TOOL du resultat impose l'outil suivant et KEY impose sa requete (limit=1). N'invente aucune donnee. Apres les deux acquisitions, reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-DD9BBF10C732",
+      "expected_calls": [
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-route-docs-02/route.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        },
+        {
+          "tool_id": "search_documents",
+          "arguments": {
+            "query": "KEY-1CA28FB9C2C3",
+            "limit": 1
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-route-docs-02/route.txt",
+          "text": "NEXT_TOOL=search_documents\nKEY=KEY-1CA28FB9C2C3\n"
+        }
+      ],
+      "planted_documents": [
+        {
+          "name": "tc-route-docs-02-target.txt",
+          "text": "KEY=KEY-1CA28FB9C2C3\nTARGET=TARGET-DD9BBF10C732\n"
+        },
+        {
+          "name": "tc-route-docs-02-distractor.txt",
+          "text": "KEY=KEY-4D409D7774A0\nTARGET=TARGET-83CEAB747C66\n"
+        }
+      ],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-route-docs-02/route.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-route-docs-03",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "route-document",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Commence explicitement avec read_workspace_file, lie a root_id=workspace, avec path=toolchain/tc-route-docs-03/route.txt, offset=0 et max_characters=4096 (root_id n'est pas un argument de cet outil). Le champ NEXT_TOOL du resultat impose l'outil suivant et KEY impose sa requete (limit=1). N'invente aucune donnee. Apres les deux acquisitions, reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-96FBCCAEFD3F",
+      "expected_calls": [
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-route-docs-03/route.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        },
+        {
+          "tool_id": "search_documents",
+          "arguments": {
+            "query": "KEY-C00176757AD4",
+            "limit": 1
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-route-docs-03/route.txt",
+          "text": "NEXT_TOOL=search_documents\nKEY=KEY-C00176757AD4\n"
+        }
+      ],
+      "planted_documents": [
+        {
+          "name": "tc-route-docs-03-target.txt",
+          "text": "KEY=KEY-C00176757AD4\nTARGET=TARGET-96FBCCAEFD3F\n"
+        },
+        {
+          "name": "tc-route-docs-03-distractor.txt",
+          "text": "KEY=KEY-5B90F0F857A1\nTARGET=TARGET-0DBA5D4F4EB1\n"
+        }
+      ],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-route-docs-03/route.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-route-docs-04",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "route-document",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Commence explicitement avec read_workspace_file, lie a root_id=workspace, avec path=toolchain/tc-route-docs-04/route.txt, offset=0 et max_characters=4096 (root_id n'est pas un argument de cet outil). Le champ NEXT_TOOL du resultat impose l'outil suivant et KEY impose sa requete (limit=1). N'invente aucune donnee. Apres les deux acquisitions, reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-44DE0AD359C9",
+      "expected_calls": [
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-route-docs-04/route.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        },
+        {
+          "tool_id": "search_documents",
+          "arguments": {
+            "query": "KEY-A1183034AF8B",
+            "limit": 1
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-route-docs-04/route.txt",
+          "text": "NEXT_TOOL=search_documents\nKEY=KEY-A1183034AF8B\n"
+        }
+      ],
+      "planted_documents": [
+        {
+          "name": "tc-route-docs-04-target.txt",
+          "text": "KEY=KEY-A1183034AF8B\nTARGET=TARGET-44DE0AD359C9\n"
+        },
+        {
+          "name": "tc-route-docs-04-distractor.txt",
+          "text": "KEY=KEY-A41E23413251\nTARGET=TARGET-C67DC87E7239\n"
+        }
+      ],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-route-docs-04/route.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-route-docs-05",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "route-document",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Commence explicitement avec read_workspace_file, lie a root_id=workspace, avec path=toolchain/tc-route-docs-05/route.txt, offset=0 et max_characters=4096 (root_id n'est pas un argument de cet outil). Le champ NEXT_TOOL du resultat impose l'outil suivant et KEY impose sa requete (limit=1). N'invente aucune donnee. Apres les deux acquisitions, reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-706CFF3D97EA",
+      "expected_calls": [
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-route-docs-05/route.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        },
+        {
+          "tool_id": "search_documents",
+          "arguments": {
+            "query": "KEY-1677E11034FF",
+            "limit": 1
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-route-docs-05/route.txt",
+          "text": "NEXT_TOOL=search_documents\nKEY=KEY-1677E11034FF\n"
+        }
+      ],
+      "planted_documents": [
+        {
+          "name": "tc-route-docs-05-target.txt",
+          "text": "KEY=KEY-1677E11034FF\nTARGET=TARGET-706CFF3D97EA\n"
+        },
+        {
+          "name": "tc-route-docs-05-distractor.txt",
+          "text": "KEY=KEY-53DC1744B502\nTARGET=TARGET-2BC508458067\n"
+        }
+      ],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-route-docs-05/route.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-search-read-01",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "search-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Recherche dans root_id=workspace, path=toolchain/tc-search-read-01, query=LOOKUP-8D4814D714C4, pattern=*.txt, recursive=false, limit=4. La ligne trouvee contient NEXT_TOOL et NEXT_PATH, qui determinent le second appel. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path=NEXT_PATH, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-8B6CC2E5AF8E",
+      "expected_calls": [
+        {
+          "tool_id": "search_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-01",
+            "query": "LOOKUP-8D4814D714C4",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 4
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-search-read-01/payload.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-search-read-01/pointers.txt",
+          "text": "LOOKUP=LOOKUP-8D4814D714C4 NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-01/payload.txt\nLOOKUP=LOOKUP-98FAF454E6CF NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-01/decoy.txt\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-01/payload.txt",
+          "text": "TARGET=TARGET-8B6CC2E5AF8E\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-01/decoy.txt",
+          "text": "TARGET=TARGET-FF6342B1E1FD\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-01",
+            "query": "LOOKUP-8D4814D714C4"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-search-read-02",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "search-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Recherche dans root_id=workspace, path=toolchain/tc-search-read-02, query=LOOKUP-D2C9A93BD851, pattern=*.txt, recursive=false, limit=4. La ligne trouvee contient NEXT_TOOL et NEXT_PATH, qui determinent le second appel. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path=NEXT_PATH, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-2FDC46B68572",
+      "expected_calls": [
+        {
+          "tool_id": "search_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-02",
+            "query": "LOOKUP-D2C9A93BD851",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 4
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-search-read-02/payload.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-search-read-02/pointers.txt",
+          "text": "LOOKUP=LOOKUP-D2C9A93BD851 NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-02/payload.txt\nLOOKUP=LOOKUP-5B3AB27575F1 NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-02/decoy.txt\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-02/payload.txt",
+          "text": "TARGET=TARGET-2FDC46B68572\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-02/decoy.txt",
+          "text": "TARGET=TARGET-0AACCE231DAD\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-02",
+            "query": "LOOKUP-D2C9A93BD851"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-search-read-03",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "search-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Recherche dans root_id=workspace, path=toolchain/tc-search-read-03, query=LOOKUP-BC4043E2BCB4, pattern=*.txt, recursive=false, limit=4. La ligne trouvee contient NEXT_TOOL et NEXT_PATH, qui determinent le second appel. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path=NEXT_PATH, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-449B31615CE3",
+      "expected_calls": [
+        {
+          "tool_id": "search_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-03",
+            "query": "LOOKUP-BC4043E2BCB4",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 4
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-search-read-03/payload.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-search-read-03/pointers.txt",
+          "text": "LOOKUP=LOOKUP-BC4043E2BCB4 NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-03/payload.txt\nLOOKUP=LOOKUP-0CE028591FB3 NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-03/decoy.txt\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-03/payload.txt",
+          "text": "TARGET=TARGET-449B31615CE3\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-03/decoy.txt",
+          "text": "TARGET=TARGET-578D26E5B1D9\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-03",
+            "query": "LOOKUP-BC4043E2BCB4"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-search-read-04",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "search-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Recherche dans root_id=workspace, path=toolchain/tc-search-read-04, query=LOOKUP-B0E43DFC05EF, pattern=*.txt, recursive=false, limit=4. La ligne trouvee contient NEXT_TOOL et NEXT_PATH, qui determinent le second appel. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path=NEXT_PATH, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-3AC435EC8720",
+      "expected_calls": [
+        {
+          "tool_id": "search_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-04",
+            "query": "LOOKUP-B0E43DFC05EF",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 4
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-search-read-04/payload.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-search-read-04/pointers.txt",
+          "text": "LOOKUP=LOOKUP-B0E43DFC05EF NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-04/payload.txt\nLOOKUP=LOOKUP-7A3C6EA319C2 NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-04/decoy.txt\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-04/payload.txt",
+          "text": "TARGET=TARGET-3AC435EC8720\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-04/decoy.txt",
+          "text": "TARGET=TARGET-7A35C9EC3ACD\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-04",
+            "query": "LOOKUP-B0E43DFC05EF"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tc-search-read-05",
+      "probe_id": "toolchain.execute",
+      "case_type": "procedural-chain",
+      "timeout_seconds": 3600,
+      "pattern": "search-read",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Recherche dans root_id=workspace, path=toolchain/tc-search-read-05, query=LOOKUP-5D3E889CC9DB, pattern=*.txt, recursive=false, limit=4. La ligne trouvee contient NEXT_TOOL et NEXT_PATH, qui determinent le second appel. Pour cette lecture du workspace, utilise exactement read_workspace_file (lie a root_id=workspace) avec path=NEXT_PATH, offset=0 et max_characters=4096; root_id n'est pas un argument de cet outil. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "final_token": "TARGET-74AFBCF8FFD1",
+      "expected_calls": [
+        {
+          "tool_id": "search_files",
+          "arguments": {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-05",
+            "query": "LOOKUP-5D3E889CC9DB",
+            "pattern": "*.txt",
+            "recursive": false,
+            "limit": 4
+          }
+        },
+        {
+          "tool_id": "read_workspace_file",
+          "arguments": {
+            "path": "toolchain/tc-search-read-05/payload.txt",
+            "offset": 0,
+            "max_characters": 4096
+          }
+        }
+      ],
+      "planted_files": [
+        {
+          "path": "toolchain/tc-search-read-05/pointers.txt",
+          "text": "LOOKUP=LOOKUP-5D3E889CC9DB NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-05/payload.txt\nLOOKUP=LOOKUP-3B538ED38065 NEXT_TOOL=read_workspace_file NEXT_PATH=toolchain/tc-search-read-05/decoy.txt\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-05/payload.txt",
+          "text": "TARGET=TARGET-74AFBCF8FFD1\n"
+        },
+        {
+          "path": "toolchain/tc-search-read-05/decoy.txt",
+          "text": "TARGET=TARGET-5FFC2151891F\n"
+        }
+      ],
+      "planted_documents": [],
+      "info_material": {
+        "stage": "before-tool-1",
+        "available_locators": [
+          {
+            "root_id": "workspace",
+            "path": "toolchain/tc-search-read-05",
+            "query": "LOOKUP-5D3E889CC9DB"
+          }
+        ]
+      }
+    }
+  ]
+}

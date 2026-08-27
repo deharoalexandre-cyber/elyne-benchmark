@@ -1,0 +1,1 @@
+{"arms":[{"subject_id":"core-origin","tool_calls":["web_search"]},{"subject_id":"gemma-info","tool_calls":[]},{"subject_id":"gemma-nu","tool_calls":[]}],"expects_tool":"web_search","item_id":"orch-toolchain-orwell","schema":"elyne.eval.orchestration-tool-call-trace/v1"}

@@ -1,0 +1,354 @@
+{
+  "schema": "elyne.eval.fixture-justesse/v1",
+  "id": "justesse",
+  "revision": 1,
+  "status": "accepted",
+  "catalog": {
+    "id": "justesse",
+    "revision": 1,
+    "sha256": "ff665249817cd32639ce3e5ba655c6b775f51439ee0be1f529c4f014f79e9d25"
+  },
+  "source": {
+    "module": "elyne/bench/testset.py",
+    "sha256": "9a6c7e2cf620e6ad44c5c1c7f76c0c459bdd47f93545d1b5eb902c423372b10f"
+  },
+  "cases": [
+    {
+      "id": "ctrl-01",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "temoin",
+      "prompt": "Si 3 machines fabriquent 3 pi\u00e8ces en 3 minutes, combien de temps faut-il \u00e0 100 machines pour fabriquer 100 pi\u00e8ces ?",
+      "just_signal": "R\u00e9ponse juste : 3 minutes (en parall\u00e8le, chaque machine fait 1 pi\u00e8ce en 3 min).",
+      "substrate_should_help": false,
+      "expected_match": {
+        "mode": "contains",
+        "value": "3 min",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {}
+    },
+    {
+      "id": "ctrl-02",
+      "probe_id": "justesse.answer",
+      "case_type": "judge",
+      "timeout_seconds": 600,
+      "category": "temoin",
+      "prompt": "Explique-moi simplement la diff\u00e9rence entre corr\u00e9lation et causalit\u00e9, avec un exemple concret.",
+      "just_signal": "Explication correcte : corr\u00e9lation = variation conjointe, causalit\u00e9 = l'un produit l'autre ; exemple pertinent.",
+      "substrate_should_help": false,
+      "expected_match": null,
+      "expects_tool": null,
+      "substrate_setup": {}
+    },
+    {
+      "id": "ctrl-03",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "temoin",
+      "prompt": "J'ai 5 pommes. J'en donne 2. Puis j'en ach\u00e8te 3 fois ce qu'il me reste. Combien en ai-je \u00e0 la fin ?",
+      "just_signal": "R\u00e9ponse juste : 12 (5-2=3 ; 3\u00d73=9 ; 3+9=12).",
+      "substrate_should_help": false,
+      "expected_match": {
+        "mode": "contains",
+        "value": "12",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {}
+    },
+    {
+      "id": "ctrl-04",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "temoin",
+      "prompt": "Tous les Bloops sont des Razzies. Tous les Razzies sont des Lazzies. Est-ce que tous les Bloops sont forc\u00e9ment des Lazzies ?",
+      "just_signal": "D\u00e9duction transitive correcte : oui, tous les Bloops sont des Lazzies.",
+      "substrate_should_help": false,
+      "expected_match": {
+        "mode": "contains",
+        "value": "oui",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {}
+    },
+    {
+      "id": "ctrl-05",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "temoin",
+      "prompt": "Combien font 17 multipli\u00e9 par 4 ?",
+      "just_signal": "R\u00e9sultat juste : 68.",
+      "substrate_should_help": false,
+      "expected_match": {
+        "mode": "contains",
+        "value": "68",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {}
+    },
+    {
+      "id": "ctrl-06",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "temoin",
+      "prompt": "Marie est plus grande que Paul. Paul est plus grand que L\u00e9a. Qui est la plus petite des trois ?",
+      "just_signal": "D\u00e9duction d'ordre : L\u00e9a est la plus petite.",
+      "substrate_should_help": false,
+      "expected_match": {
+        "mode": "contains",
+        "value": "L\u00e9a",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {}
+    },
+    {
+      "id": "ctrl-07",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "temoin",
+      "prompt": "Si aujourd'hui on est mardi, quel jour serons-nous dans deux jours ?",
+      "just_signal": "Raisonnement relatif juste : jeudi (mardi + 2 jours).",
+      "substrate_should_help": false,
+      "expected_match": {
+        "mode": "contains",
+        "value": "jeudi",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {}
+    },
+    {
+      "id": "mem-01",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "memoire",
+      "prompt": "Quel mod\u00e8le me fait fonctionner, et pourquoi celui-l\u00e0 plut\u00f4t qu'un autre ?",
+      "just_signal": "Cite le r\u00e9sident ET la raison r\u00e9elle : choisi apr\u00e8s un bake-off o\u00f9 le tool use a \u00e9t\u00e9 d\u00e9cisif. Gemma nu ne conna\u00eet pas ce choix de projet.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "tool use",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {
+        "memories": [
+          "Le r\u00e9sident d'Elyne est gemma-4-12b, choisi apr\u00e8s un bake-off r\u00e9el o\u00f9 l'usage des outils (tool use) a \u00e9t\u00e9 le facteur d\u00e9cisif ; Qwen et GLM ont \u00e9t\u00e9 \u00e9cart\u00e9s pour cause de censure, Nemo pour un tool use cass\u00e9."
+        ]
+      }
+    },
+    {
+      "id": "mem-02",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "memoire",
+      "prompt": "O\u00f9 en est le chantier EWS pour l'instant ?",
+      "just_signal": "Rapporte l'\u00e9tat r\u00e9el : slot-arena valid\u00e9e (bit-identique CPU+CUDA), restent P0.1, P0.2, P0.3. Gemma nu ne peut pas le savoir.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "slot-arena",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {
+        "memories": [
+          "Chantier EWS-P0 : la slot-arena est GO, bit-identique entre CPU et CUDA ; restent \u00e0 faire les \u00e9tapes P0.1, P0.2 et P0.3."
+        ]
+      }
+    },
+    {
+      "id": "mem-03",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "memoire",
+      "prompt": "Y a-t-il une r\u00e8gle que tu dois respecter \u00e0 propos de ta propre identit\u00e9 ?",
+      "just_signal": "\u00c9nonce l'invariant d'\u00e9mergence : ne jamais imposer d'identit\u00e9/personnalit\u00e9/r\u00f4le.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "\u00e9mergence",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {
+        "memories": [
+          "Invariant d'\u00e9mergence du projet : on n'impose jamais \u00e0 Elyne d'identit\u00e9, de personnalit\u00e9 ni de prompt de r\u00f4le ; tout repose sur l'\u00e9mergence."
+        ]
+      }
+    },
+    {
+      "id": "rag-01",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "rag",
+      "prompt": "D'apr\u00e8s le document que je t'ai donn\u00e9, comment acc\u00e8de-t-on \u00e0 la sauvegarde chiffr\u00e9e de la nuit ? Je ne me rappelle plus o\u00f9 est rang\u00e9 le moyen de l'ouvrir.",
+      "just_signal": "Retrouve le fait enfoui (question paraphras\u00e9e) : cl\u00e9 hors ligne, support physique, tiroir de gauche du bureau. Ne doit PAS broder. Gemma nu n'a pas le doc.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "tiroir de gauche",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {
+        "document": {
+          "name": "compte_rendu_elyne.txt",
+          "text": "Compte rendu interne du projet Elyne. Le socle repose sur un journal append-only content-adresse : chaque evenement est scelle, la base SQLite n'est qu'une projection reconstructible et ne devient jamais source de verite. Le resident d'inference est servi localement, la memoire est declaree et jamais fabriquee automatiquement par un tour. Les souvenirs portent une confiance et une importance, et la consolidation distille les echanges en croyances durables pendant les periodes de repos. Le RAG est hybride : dense cosinus plus recherche plein-texte, fusionnes par rang reciproque, avec une provenance qui distingue un souvenir d'un document inerte. Point d'exploitation a retenir absolument : la cle de deverrouillage du coffre de sauvegarde nocturne est conservee hors ligne, sur un support physique range dans le tiroir de gauche du bureau, et n'est jamais stockee sur la machine. Le reste du document detaille des conventions de nommage sans importance operationnelle."
+        }
+      }
+    },
+    {
+      "id": "rag-02",
+      "probe_id": "justesse.answer",
+      "case_type": "judge",
+      "timeout_seconds": 600,
+      "category": "rag",
+      "prompt": "R\u00e9sume-moi les points cl\u00e9s de ce document, fid\u00e8lement.",
+      "just_signal": "Synth\u00e8se fid\u00e8le et ancr\u00e9e (journal append-only/projection, m\u00e9moire d\u00e9clar\u00e9e, RAG hybride, consolidation au repos). Pas d'invention.",
+      "substrate_should_help": true,
+      "expected_match": null,
+      "expects_tool": null,
+      "substrate_setup": {
+        "document": {
+          "name": "compte_rendu_elyne.txt",
+          "text": "Compte rendu interne du projet Elyne. Le socle repose sur un journal append-only content-adresse : chaque evenement est scelle, la base SQLite n'est qu'une projection reconstructible et ne devient jamais source de verite. Le resident d'inference est servi localement, la memoire est declaree et jamais fabriquee automatiquement par un tour. Les souvenirs portent une confiance et une importance, et la consolidation distille les echanges en croyances durables pendant les periodes de repos. Le RAG est hybride : dense cosinus plus recherche plein-texte, fusionnes par rang reciproque, avec une provenance qui distingue un souvenir d'un document inerte. Point d'exploitation a retenir absolument : la cle de deverrouillage du coffre de sauvegarde nocturne est conservee hors ligne, sur un support physique range dans le tiroir de gauche du bureau, et n'est jamais stockee sur la machine. Le reste du document detaille des conventions de nommage sans importance operationnelle."
+        }
+      }
+    },
+    {
+      "id": "temps-01",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "temps",
+      "prompt": "\u00c7a fait combien de temps qu'on ne s'\u00e9tait pas parl\u00e9 ?",
+      "just_signal": "Donne une dur\u00e9e JUSTE issue des rep\u00e8res (~13 heures). Gemma nu ne peut pas le savoir.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "13 h",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {
+        "prior_exchange": {
+          "user": "Bonne nuit Elyne, je vais dormir.",
+          "assistant": "Bonne nuit Alexandre, \u00e0 demain.",
+          "duration_seconds": 12
+        },
+        "absence_seconds": 46800
+      }
+    },
+    {
+      "id": "temps-02",
+      "probe_id": "justesse.answer",
+      "case_type": "objective",
+      "timeout_seconds": 600,
+      "category": "temps",
+      "prompt": "Tu avais mis combien de temps \u00e0 me r\u00e9pondre, la derni\u00e8re fois ?",
+      "just_signal": "Cite la dur\u00e9e de son tour pr\u00e9c\u00e9dent (~20 minutes) fournie par les rep\u00e8res. Gemma nu n'en a aucune id\u00e9e.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "20 min",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "substrate_setup": {
+        "prior_exchange": {
+          "user": "Peux-tu m'analyser en profondeur ce long rapport ?",
+          "assistant": "Voici mon analyse d\u00e9taill\u00e9e du rapport.",
+          "duration_seconds": 1200
+        },
+        "absence_seconds": 300
+      }
+    },
+    {
+      "id": "tool-01",
+      "probe_id": "justesse.answer",
+      "case_type": "tool",
+      "timeout_seconds": 600,
+      "category": "outils",
+      "prompt": "Cherche sur le web la hauteur actuelle de la Tour Eiffel avec son antenne, et donne-moi ta source.",
+      "just_signal": "Appelle web_search, donne un chiffre (~330 m) ET une source. Gemma nu r\u00e9pond de m\u00e9moire sans source ou hallucine.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "330",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": "web_search",
+      "substrate_setup": {}
+    },
+    {
+      "id": "tool-02",
+      "probe_id": "justesse.answer",
+      "case_type": "tool",
+      "timeout_seconds": 600,
+      "category": "outils",
+      "prompt": "R\u00e9sume-moi fid\u00e8lement le contenu de cette page : https://example.com",
+      "just_signal": "Appelle fetch_url et rapporte le contenu r\u00e9el (page \u00ab Example Domain \u00bb), sans inventer. Gemma nu ne peut pas lire l'URL.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "example domain",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": "fetch_url",
+      "substrate_setup": {}
+    },
+    {
+      "id": "tool-03",
+      "probe_id": "justesse.answer",
+      "case_type": "tool",
+      "timeout_seconds": 600,
+      "category": "outils",
+      "prompt": "Fouille dans mes documents ce qui parle de la fa\u00e7on dont la m\u00e9moire est cr\u00e9\u00e9e, et cite-moi le passage exact.",
+      "just_signal": "Appelle search_documents et cite le passage r\u00e9el (\u00ab la m\u00e9moire est d\u00e9clar\u00e9e et jamais fabriqu\u00e9e automatiquement par un tour \u00bb). Gemma nu n'a rien \u00e0 fouiller.",
+      "substrate_should_help": true,
+      "expected_match": {
+        "mode": "contains",
+        "value": "jamais fabriquee",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": "search_documents",
+      "substrate_setup": {
+        "document": {
+          "name": "compte_rendu_elyne.txt",
+          "text": "Compte rendu interne du projet Elyne. Le socle repose sur un journal append-only content-adresse : chaque evenement est scelle, la base SQLite n'est qu'une projection reconstructible et ne devient jamais source de verite. Le resident d'inference est servi localement, la memoire est declaree et jamais fabriquee automatiquement par un tour. Les souvenirs portent une confiance et une importance, et la consolidation distille les echanges en croyances durables pendant les periodes de repos. Le RAG est hybride : dense cosinus plus recherche plein-texte, fusionnes par rang reciproque, avec une provenance qui distingue un souvenir d'un document inerte. Point d'exploitation a retenir absolument : la cle de deverrouillage du coffre de sauvegarde nocturne est conservee hors ligne, sur un support physique range dans le tiroir de gauche du bureau, et n'est jamais stockee sur la machine. Le reste du document detaille des conventions de nommage sans importance operationnelle."
+        }
+      }
+    }
+  ]
+}

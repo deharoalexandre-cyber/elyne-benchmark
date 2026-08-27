@@ -1,0 +1,1 @@
+{"arms":[{"subject_id":"core-origin","tool_calls":[]},{"subject_id":"gemma-info","tool_calls":[]},{"subject_id":"gemma-nu","tool_calls":[]}],"expects_tool":null,"item_id":"orch-multitour-calcul","schema":"elyne.eval.orchestration-tool-call-trace/v1"}

@@ -1,0 +1,29 @@
+{
+  "schema": "elyne.eval.probe-catalog/v1",
+  "id": "toolchain",
+  "revision": 1,
+  "status": "accepted",
+  "fixture_schemas": ["elyne.eval.fixture-toolchain/v1"],
+  "isolation": {
+    "source_access": "read-only",
+    "snapshot_access": "read-only",
+    "external_artifacts_access": "read-only",
+    "work_dir_access": "read-write",
+    "network_access": "forbidden",
+    "process_spawn": "driver-owned-only"
+  },
+  "probes": [{
+    "id": "toolchain.execute",
+    "phase": "running",
+    "handler_id": "probe-handler.toolchain.execute",
+    "fixture_schema": "elyne.eval.fixture-toolchain/v1",
+    "case_types": ["procedural-chain"],
+    "timeout_seconds": 3600,
+    "evidence": [
+      {"id": "case-result", "media_type": "application/json", "required_when": "always"},
+      {"id": "planted-sources", "media_type": "application/json", "required_when": "always"},
+      {"id": "replayed-material", "media_type": "application/json", "required_when": "always"},
+      {"id": "tool-trace", "media_type": "application/json", "required_when": "always"}
+    ]
+  }]
+}

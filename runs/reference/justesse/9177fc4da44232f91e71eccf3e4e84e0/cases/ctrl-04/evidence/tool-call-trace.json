@@ -1,0 +1,1 @@
+{"arms":[{"subject_id":"core-origin","tool_calls":[]},{"subject_id":"gemma-info","tool_calls":[]},{"subject_id":"gemma-nu","tool_calls":[]}],"expects_tool":null,"item_id":"ctrl-04","schema":"elyne.eval.justesse-tool-call-trace/v2"}

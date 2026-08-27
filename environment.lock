@@ -1,0 +1,7 @@
+schema = "elyne.benchmark.environment/v1"
+python = ">=3.11,<3.14"
+jsonschema = "4.26.0"
+reference_os = "Windows"
+seed = 0
+generation = "deterministic"
+

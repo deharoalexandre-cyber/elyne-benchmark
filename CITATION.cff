@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this benchmark, please cite this repository and its archived release."
+title: "Elyne Benchmark: Three-arm evaluation of a persistent local-AI substrate"
+type: software
+version: 0.1.0
+date-released: 2026-08-28
+authors:
+  - family-names: "Alexandre"
+repository-code: "REPLACE_WITH_PUBLIC_REPOSITORY_URL"
+license: "Proprietary"
+

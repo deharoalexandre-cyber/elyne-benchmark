@@ -1,0 +1,2 @@
+"""Frozen public evaluation assets."""
+

@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "elyne-benchmark"
+version = "0.1.0"
+description = "Reproducible three-arm benchmark for persistent local-AI substrates"
+requires-python = ">=3.11"
+dependencies = ["jsonschema==4.26.0"]
+
+[tool.setuptools.packages.find]
+include = ["elyne_benchmark*", "elyne*", "evals*"]
+

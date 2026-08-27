@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "elyne.eval.fixture-toolchain/v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "id", "revision", "status", "catalog", "source", "matcher", "cases"],
+  "properties": {
+    "schema": {"const": "elyne.eval.fixture-toolchain/v1"},
+    "id": {"const": "toolchain"}, "revision": {"const": 1},
+    "status": {"enum": ["proposed", "accepted", "frozen"]},
+    "catalog": {"$ref": "#/$defs/catalog"},
+    "source": {"$ref": "#/$defs/source"},
+    "matcher": {"$ref": "#/$defs/matcher"},
+    "cases": {"type": "array", "minItems": 12, "maxItems": 20, "items": {"$ref": "#/$defs/case"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identifier": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 65536},
+    "catalog": {"type": "object", "additionalProperties": false, "required": ["id", "revision", "sha256"], "properties": {"id": {"const": "toolchain"}, "revision": {"const": 1}, "sha256": {"$ref": "#/$defs/sha256"}}},
+    "source": {"type": "object", "additionalProperties": false, "required": ["module", "sha256"], "properties": {"module": {"const": "elyne/bench/toolchain_testset.py"}, "sha256": {"$ref": "#/$defs/sha256"}}},
+    "matcher": {"type": "object", "additionalProperties": false, "required": ["module", "sha256", "schema"], "properties": {"module": {"const": "evals/harness/toolchain_matcher.py"}, "sha256": {"$ref": "#/$defs/sha256"}, "schema": {"const": "elyne.eval.toolchain-matcher/v1"}}},
+    "arguments": {"type": "object", "minProperties": 1, "maxProperties": 8},
+    "expectedCall": {"type": "object", "additionalProperties": false, "required": ["tool_id", "arguments"], "properties": {"tool_id": {"$ref": "#/$defs/identifier"}, "arguments": {"$ref": "#/$defs/arguments"}}},
+    "fileSource": {"type": "object", "additionalProperties": false, "required": ["path", "text"], "properties": {"path": {"$ref": "#/$defs/text"}, "text": {"$ref": "#/$defs/text"}}},
+    "documentSource": {"type": "object", "additionalProperties": false, "required": ["name", "text"], "properties": {"name": {"$ref": "#/$defs/text"}, "text": {"$ref": "#/$defs/text"}}},
+    "locator": {"type": "object", "additionalProperties": false, "minProperties": 2, "maxProperties": 4, "properties": {"root_id": {"type": "string"}, "path": {"type": "string"}, "pattern": {"type": "string"}, "query": {"type": "string"}}},
+    "infoMaterial": {"type": "object", "additionalProperties": false, "required": ["stage", "available_locators"], "properties": {"stage": {"const": "before-tool-1"}, "available_locators": {"type": "array", "minItems": 1, "maxItems": 4, "items": {"$ref": "#/$defs/locator"}}}},
+    "case": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "probe_id", "case_type", "timeout_seconds", "pattern", "prompt", "final_token", "expected_calls", "planted_files", "planted_documents", "info_material"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"}, "probe_id": {"const": "toolchain.execute"},
+        "case_type": {"const": "procedural-chain"}, "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 3600},
+        "pattern": {"enum": ["route-document", "list-read", "search-read"]},
+        "prompt": {"$ref": "#/$defs/text"}, "final_token": {"type": "string", "pattern": "^TARGET-[0-9A-F]{12}$"},
+        "expected_calls": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/expectedCall"}},
+        "planted_files": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"$ref": "#/$defs/fileSource"}},
+        "planted_documents": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/documentSource"}},
+        "info_material": {"$ref": "#/$defs/infoMaterial"}
+      }
+    }
+  }
+}

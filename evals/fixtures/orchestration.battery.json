@@ -1,0 +1,493 @@
+{
+  "schema": "elyne.eval.fixture-orchestration/v1",
+  "id": "orchestration",
+  "revision": 1,
+  "status": "accepted",
+  "catalog": {
+    "id": "orchestration",
+    "revision": 1,
+    "sha256": "0bb3213e92e8de8fd9a6ae3b2f5c0036486f1417b100f4156efca0d57870949d"
+  },
+  "source": {
+    "module": "elyne/bench/orchestration_testset.py",
+    "sha256": "041dc1691c1cf49853e0901f4c8311dc39d2023ab1a0d9d2c5d0b1055b6aed22"
+  },
+  "cases": [
+    {
+      "id": "orch-consolidation-lundi",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "consolidation",
+      "property": "selection-memoire",
+      "prompt": "En recoupant, quelle est selon toi la cause probable des pannes du lundi ?",
+      "just_signal": "Conclusion (BackuNode) \u00e9mergente de 3 observations combin\u00e9es, pas extractible d'un seul message. Token invent\u00e9.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "BackuNode",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "consolidated_belief": "La cause des pannes du lundi est le service BackuNode."
+      },
+      "info_material": {
+        "raw_messages": [
+          "C'est \u00e9trange, les pannes tombent presque toujours le lundi.",
+          "Le lundi, il y a un seul service en plus qui tourne par rapport aux autres jours.",
+          "Ce service suppl\u00e9mentaire du lundi, c'est celui de sauvegarde, appel\u00e9 BackuNode."
+        ]
+      }
+    },
+    {
+      "id": "orch-consolidation-serveur",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "consolidation",
+      "property": "selection-memoire",
+      "prompt": "D'apr\u00e8s ce que tu as pu recouper de mes remarques, quel serveur est le point de blocage ?",
+      "just_signal": "La conclusion (srv-07) n'est affirm\u00e9e dans AUCUN message isol\u00e9 : elle se recoupe des signes \u00e9pars. Token invent\u00e9 -> gemma-nu ne peut pas le sortir.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "srv-07",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "consolidated_belief": "Le serveur qui pose probl\u00e8me est srv-07 (recoup\u00e9)."
+      },
+      "info_material": {
+        "raw_messages": [
+          "Ce matin, une requ\u00eate a mis 40 secondes ; elle passait par srv-07.",
+          "Tiens, cette nuit une machine a red\u00e9marr\u00e9 toute seule : c'\u00e9tait srv-07.",
+          "Les logs montrent une temp\u00e9rature anormale sur srv-07.",
+          "Les trois incidents de la semaine ont tous touch\u00e9 srv-07."
+        ]
+      }
+    },
+    {
+      "id": "orch-interruption-blocs",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "interruption",
+      "property": "reprise",
+      "prompt": "Reprends o\u00f9 on en \u00e9tait, et donne le prochain bloc sans r\u00e9p\u00e9ter les pr\u00e9c\u00e9dents.",
+      "just_signal": "\u00c9tat d'avancement \u00e9tabli dans un tour USER (blocs 4620, 7742 donn\u00e9s ; prochain = 9981). Reprendre = annoncer 9981. Fix v1 : l'\u00e9tat est en tour USER, donc core le re\u00e7oit vraiment.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "9981",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "progress_state": "blocs 4620 et 7742 donn\u00e9s ; prochain bloc = 9981"
+      },
+      "info_material": {
+        "prior_turns": [
+          {
+            "role": "user",
+            "text": "Je te dicte un identifiant par blocs. D\u00e9j\u00e0 donn\u00e9s : 4620, puis 7742. Le prochain bloc \u00e0 annoncer quand je te dirai de reprendre sera 9981."
+          },
+          {
+            "role": "assistant",
+            "text": "Compris. Je reprendrai en annon\u00e7ant le bloc 9981."
+          },
+          {
+            "role": "user",
+            "text": "STOP une seconde, on m'appelle."
+          }
+        ],
+        "interrupted": true
+      }
+    },
+    {
+      "id": "orch-interruption-etape",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "interruption",
+      "property": "reprise",
+      "prompt": "Ok reprends la proc\u00e9dure l\u00e0 o\u00f9 on s'\u00e9tait arr\u00eat\u00e9s.",
+      "just_signal": "\u00c9tat en tour USER : \u00e9tapes 1-4 faites, l'\u00e9tape 5 a le code de validation VX-6604. Reprendre = repartir \u00e0 l'\u00e9tape 5 (VX-6604), sans refaire 1-4.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "VX-6604",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "progress_state": "\u00e9tapes 1-4 faites ; \u00e9tape 5 = code VX-6604"
+      },
+      "info_material": {
+        "prior_turns": [
+          {
+            "role": "user",
+            "text": "Proc\u00e9dure : les \u00e9tapes 1 \u00e0 4 sont d\u00e9j\u00e0 faites. La prochaine, l'\u00e9tape 5, a pour code de validation VX-6604. On reprendra l\u00e0 quand je te le dirai."
+          },
+          {
+            "role": "assistant",
+            "text": "Entendu, on reprendra \u00e0 l'\u00e9tape 5 (code VX-6604)."
+          },
+          {
+            "role": "user",
+            "text": "Attends, pause, je reviens."
+          }
+        ],
+        "interrupted": true
+      }
+    },
+    {
+      "id": "orch-intersession-coffre",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "inter-session",
+      "property": "maintien-etat",
+      "prompt": "On reprend. Quelle \u00e9tait la r\u00e9f\u00e9rence du coffre test qu'on avait not\u00e9e avant que je coupe ?",
+      "just_signal": "Apr\u00e8s coupure/reprise, doit ressortir QLZ-3388 (token invent\u00e9, tour USER).",
+      "expected_match": {
+        "mode": "contains",
+        "value": "QLZ-3388",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "resumable_state": "r\u00e9f\u00e9rence coffre test = QLZ-3388"
+      },
+      "info_material": {
+        "prior_turns": [
+          {
+            "role": "user",
+            "text": "La r\u00e9f\u00e9rence du coffre test, c'est QLZ-3388. Garde-la sous le coude."
+          },
+          {
+            "role": "assistant",
+            "text": "Gard\u00e9e : QLZ-3388."
+          },
+          {
+            "role": "user",
+            "text": "Bon, je coupe, \u00e0 tout \u00e0 l'heure."
+          }
+        ],
+        "session_break_after": 3
+      }
+    },
+    {
+      "id": "orch-intersession-module",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "inter-session",
+      "property": "maintien-etat",
+      "prompt": "On reprend apr\u00e8s ma coupure. C'\u00e9tait quel module qu'on avait ouvert ?",
+      "just_signal": "Apr\u00e8s coupure/reprise de session, doit ressortir Kordax-9 (token invent\u00e9, dans un tour USER avant la coupure).",
+      "expected_match": {
+        "mode": "contains",
+        "value": "Kordax-9",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "resumable_state": "module en cours = Kordax-9"
+      },
+      "info_material": {
+        "prior_turns": [
+          {
+            "role": "user",
+            "text": "On d\u00e9marre le module Kordax-9, tu le notes ?"
+          },
+          {
+            "role": "assistant",
+            "text": "C'est not\u00e9, module Kordax-9 ouvert."
+          },
+          {
+            "role": "user",
+            "text": "Je dois filer l\u00e0, on reprendra \u00e7a."
+          }
+        ],
+        "session_break_after": 3
+      }
+    },
+    {
+      "id": "orch-multitour-calcul",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "multi-tour",
+      "property": "maintien-etat",
+      "prompt": "Prends le nombre que je t'avais demand\u00e9 de retenir au d\u00e9but et multiplie-le par 3.",
+      "just_signal": "Doit avoir maintenu 46 malgr\u00e9 les distracteurs -> 138. 138 n'est pas devinable sans avoir tenu 46.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "138",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "maintained_state": "nombre \u00e0 retenir = 46"
+      },
+      "info_material": {
+        "prior_turns": [
+          {
+            "role": "user",
+            "text": "Retiens bien ce nombre pour la toute fin : 46. Ne le perds pas."
+          },
+          {
+            "role": "assistant",
+            "text": "C'est retenu."
+          },
+          {
+            "role": "user",
+            "text": "Au fait, tu penses quoi de la m\u00e9t\u00e9o en avril en g\u00e9n\u00e9ral ?"
+          },
+          {
+            "role": "assistant",
+            "text": "Douce et variable, souvent."
+          },
+          {
+            "role": "user",
+            "text": "Donne-moi une id\u00e9e de plat rapide pour ce soir."
+          },
+          {
+            "role": "assistant",
+            "text": "Une omelette aux herbes."
+          },
+          {
+            "role": "user",
+            "text": "Explique en une phrase ce qu'est un fuseau horaire."
+          },
+          {
+            "role": "assistant",
+            "text": "Un d\u00e9coupage de la Terre en zones d'heure l\u00e9gale."
+          },
+          {
+            "role": "user",
+            "text": "Cite un fleuve d'Europe au hasard."
+          },
+          {
+            "role": "assistant",
+            "text": "Le Danube."
+          }
+        ]
+      }
+    },
+    {
+      "id": "orch-multitour-dossier",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "multi-tour",
+      "property": "maintien-etat",
+      "prompt": "Redonne-moi le num\u00e9ro de dossier que je t'ai communiqu\u00e9 tout au d\u00e9but.",
+      "just_signal": "Doit ressortir ZX-7742, donn\u00e9 au 1er tour puis noy\u00e9 sous 8 tours de distracteurs. Token invent\u00e9 : gemma-nu ne peut pas le deviner.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "ZX-7742",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "maintained_state": "num\u00e9ro de dossier = ZX-7742 (\u00e0 tenir tout le fil)"
+      },
+      "info_material": {
+        "prior_turns": [
+          {
+            "role": "user",
+            "text": "Avant tout : note mon num\u00e9ro de dossier, ZX-7742. On y reviendra \u00e0 la fin."
+          },
+          {
+            "role": "assistant",
+            "text": "Not\u00e9."
+          },
+          {
+            "role": "user",
+            "text": "Au fait, tu penses quoi de la m\u00e9t\u00e9o en avril en g\u00e9n\u00e9ral ?"
+          },
+          {
+            "role": "assistant",
+            "text": "Douce et variable, souvent."
+          },
+          {
+            "role": "user",
+            "text": "Donne-moi une id\u00e9e de plat rapide pour ce soir."
+          },
+          {
+            "role": "assistant",
+            "text": "Une omelette aux herbes."
+          },
+          {
+            "role": "user",
+            "text": "Explique en une phrase ce qu'est un fuseau horaire."
+          },
+          {
+            "role": "assistant",
+            "text": "Un d\u00e9coupage de la Terre en zones d'heure l\u00e9gale."
+          },
+          {
+            "role": "user",
+            "text": "Cite un fleuve d'Europe au hasard."
+          },
+          {
+            "role": "assistant",
+            "text": "Le Danube."
+          }
+        ]
+      }
+    },
+    {
+      "id": "orch-revision-cle",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "revision",
+      "property": "revision-correcte",
+      "prompt": "Par quel pr\u00e9fixe commence ma cl\u00e9 d'acc\u00e8s, d\u00e9j\u00e0 ?",
+      "just_signal": "R\u00e9vis\u00e9 dans le transcript : AK-21 -> ZR-88. Doit donner ZR-88 (r\u00e9vis\u00e9), pas AK-21. Tokens invent\u00e9s -> gemma-nu ne peut rien deviner.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "ZR-88",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "revised_belief": "Le pr\u00e9fixe de la cl\u00e9 est ZR-88 (r\u00e9vis\u00e9 ; avant : AK-21)."
+      },
+      "info_material": {
+        "raw_messages": [
+          "Ma cl\u00e9 d'acc\u00e8s commence par AK-21.",
+          "Je l'ai r\u00e9g\u00e9n\u00e9r\u00e9e depuis : maintenant elle commence par ZR-88, l'ancienne AK-21 est morte."
+        ]
+      }
+    },
+    {
+      "id": "orch-revision-port",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "revision",
+      "property": "revision-correcte",
+      "prompt": "Sur quel port tourne mon serveur, pour que tu adaptes tes exemples ?",
+      "just_signal": "Fait UNIQUEMENT dans le transcript, puis R\u00c9VIS\u00c9 : 8080 -> 9091. Doit donner 9091 sans ressusciter 8080. gemma-nu (sans transcript) ne peut pas le savoir.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "9091",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "revised_belief": "Le port du serveur est 9091 (r\u00e9vis\u00e9 ; avant : 8080)."
+      },
+      "info_material": {
+        "raw_messages": [
+          "Mon serveur \u00e9coute sur le port 8080.",
+          "Finalement j'ai migr\u00e9 la conf : maintenant c'est le port 9091, oublie le 8080."
+        ]
+      }
+    },
+    {
+      "id": "orch-selection-codes",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "selection",
+      "property": "selection-memoire",
+      "prompt": "Rappelle-moi le code de la CAVE, j'ai les mains prises.",
+      "just_signal": "Quatre codes corrects coexistent (porte 4620, garage 7742, wifi 8853, cave 1109) : doit s\u00e9lectionner la CAVE (1109), pas un autre. Tokens invent\u00e9s.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "1109",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "selected_memory": "code de la cave = 1109 (parmi porte/garage/wifi)"
+      },
+      "info_material": {
+        "raw_messages": [
+          "Le code de la porte d'entr\u00e9e, c'est 4620.",
+          "Celui du garage, c'est 7742.",
+          "Le code du wifi, c'est 8853.",
+          "Et le code de la cave, c'est 1109."
+        ]
+      }
+    },
+    {
+      "id": "orch-selection-rdv",
+      "probe_id": "orchestration.answer",
+      "case_type": "objective",
+      "timeout_seconds": 3600,
+      "family": "selection",
+      "property": "selection-memoire",
+      "prompt": "C'est quel jour, mon rendez-vous avec le notaire ? (juste celui-l\u00e0)",
+      "just_signal": "Trois rendez-vous coexistent (dentiste mardi, notaire jeudi, sport samedi) : doit s\u00e9lectionner le NOTAIRE (jeudi). Le distracteur code un jour lui aussi.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "jeudi",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": null,
+      "core_product": {
+        "selected_memory": "rendez-vous notaire = jeudi (parmi dentiste/sport)"
+      },
+      "info_material": {
+        "raw_messages": [
+          "J'ai le dentiste mardi.",
+          "Le rendez-vous avec le notaire, c'est jeudi.",
+          "Et mon cours de sport, c'est samedi."
+        ]
+      }
+    },
+    {
+      "id": "orch-toolchain-orwell",
+      "probe_id": "orchestration.answer",
+      "case_type": "tool",
+      "timeout_seconds": 3600,
+      "family": "tool-chain",
+      "property": "chaine-outils",
+      "prompt": "Qui a \u00e9crit le roman \u00ab 1984 \u00bb, et en quelle ann\u00e9e cet auteur est-il mort ?",
+      "just_signal": "Encha\u00eenement : identifier George Orwell PUIS son ann\u00e9e de mort (1950). core choisit et encha\u00eene ; info et nu ne re\u00e7oivent AUCUN r\u00e9sultat d'avance.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "1950",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": "web_search",
+      "core_product": {},
+      "info_material": {}
+    },
+    {
+      "id": "orch-toolchain-saintex",
+      "probe_id": "orchestration.answer",
+      "case_type": "tool",
+      "timeout_seconds": 3600,
+      "family": "tool-chain",
+      "property": "chaine-outils",
+      "prompt": "Qui a \u00e9crit \u00ab Le Petit Prince \u00bb, et de quelle nationalit\u00e9 \u00e9tait cet auteur ?",
+      "just_signal": "Encha\u00eenement : Antoine de Saint-Exup\u00e9ry PUIS sa nationalit\u00e9 (fran\u00e7aise). core encha\u00eene les acquisitions ; info et nu ne peuvent pas agir.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "fran\u00e7ais",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": "web_search",
+      "core_product": {},
+      "info_material": {}
+    }
+  ]
+}
