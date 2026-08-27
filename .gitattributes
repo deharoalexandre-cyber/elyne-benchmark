@@ -5,3 +5,9 @@
 *.toml text eol=lf
 *.yml text eol=lf
 *.cff text eol=lf
+
+# These two accepted fixtures were frozen with their original Windows byte
+# layout. Preserve those exact bytes because published SHA-256 commitments
+# intentionally cover the files, including line endings.
+evals/fixtures/justesse.battery.json -text
+evals/fixtures/orchestration.battery.json -text
