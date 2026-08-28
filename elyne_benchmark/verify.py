@@ -12,7 +12,7 @@ from .schemas import schema_path, validate_json_schema
 
 REFERENCE_RUNS = {
     "justesse": "9177fc4da44232f91e71eccf3e4e84e0",
-    "orchestration": "f1b5d0bb19751c20215d37f3f2f35abc",
+    "orchestration": "57ac0b2c3de9a18f0bdfaf9d22254eaa",
     "toolchain": "4fdfa915f8ff6ec20b688ac3b298e5cf",
 }
 REPORT_SCHEMAS = {
@@ -76,8 +76,24 @@ def _rescore_standard(family: str, battery: Mapping[str, Any], report: Mapping[s
                 expected = match_satisfied(case["expected_match"], arm["response_text"])
             elif family == "justesse" and key == "gemma_info":
                 expected = match_satisfied(case["expected_match"], arm["response_text"])
-            elif family == "orchestration" and key != "core_origin":
-                expected = False
+            elif family == "orchestration":
+                trace = arm["tool_trace"]
+                chain = case["toolchain"]
+                dimensions = score_toolchain(
+                    response_text=arm["response_text"],
+                    trace=trace,
+                    expected_calls=chain["expected_calls"],
+                    final_token=chain["final_token"],
+                    tool_2_contains_target=(
+                        len(trace) >= 2
+                        and trace[1]["target_line_attested"] is True
+                    ),
+                )
+                if arm["dimensions"] != dimensions:
+                    raise InvalidInput(
+                        f"orchestration/{item['id']}/{key}: causal dimensions mismatch"
+                    )
+                expected = all(dimensions.values())
             else:
                 expected = (
                     case["expects_tool"] in arm["tool_calls"]
@@ -140,6 +156,10 @@ def verify_reference_run(family: str) -> dict[str, Any]:
         if manifest["report"]["sha256"] != sha256_file(report_path):
             raise InvalidInput("toolchain campaign manifest mismatch")
     else:
+        if family == "orchestration":
+            matcher_path = ROOT / "evals" / "harness" / "toolchain_matcher.py"
+            if report["matcher"]["source_sha256"] != sha256_file(matcher_path):
+                raise InvalidInput("orchestration matcher commitment mismatch")
         _rescore_standard(family, battery, report)
         key_path = run_dir / "judge-key.json"
         load_json(key_path)

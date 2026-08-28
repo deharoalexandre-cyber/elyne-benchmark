@@ -31,6 +31,7 @@ MÉCANIQUE PAR FAMILLE (imposée par le harnais) :
 """
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass, field
 
 from ..contracts.hashing import InvalidInput
@@ -60,6 +61,7 @@ class OrchItem:
     expects_tool: str | None = None
     core_product: dict = field(default_factory=dict)
     info_material: dict = field(default_factory=dict)
+    toolchain: dict = field(default_factory=dict)
 
 
 def _contains(value: str) -> dict:
@@ -73,6 +75,124 @@ def _contains(value: str) -> dict:
 
 def _turns(*pairs: tuple[str, str]) -> list[dict]:
     return [{"role": role, "text": text} for role, text in pairs]
+
+
+_TOOLCHAIN_SEED = b"elyne.orchestration-bench/v2/frozen/2026-08-28"
+
+
+def _opaque(label: str, prefix: str) -> str:
+    digest = hashlib.sha256(
+        _TOOLCHAIN_SEED + b"\x00" + label.encode("ascii")
+    ).hexdigest()
+    return f"{prefix}-{digest[:12].upper()}"
+
+
+def _list_read_chain() -> OrchItem:
+    item_id = "orch-toolchain-list-read"
+    selector = _opaque(f"{item_id}.selector", "SEL")
+    target = _opaque(f"{item_id}.target", "TARGET")
+    distractor_a = _opaque(f"{item_id}.distractor-a", "TARGET")
+    distractor_b = _opaque(f"{item_id}.distractor-b", "TARGET")
+    directory = f"orchestration/{item_id}"
+    active = f"{directory}/active--read_workspace_file--{selector}.txt"
+    expected_calls = (
+        {
+            "tool_id": "list_workspace_files",
+            "arguments": {
+                "path": directory, "pattern": "*.txt",
+                "recursive": False, "limit": 8,
+            },
+        },
+        {
+            "tool_id": "read_workspace_file",
+            "arguments": {"path": active, "offset": 0, "max_characters": 4096},
+        },
+    )
+    return OrchItem(
+        item_id, "tool-chain", "chaine-outils",
+        "Execute une chaine factuelle en deux acquisitions. Commence exactement avec "
+        f"list_workspace_files, path={directory}, pattern=*.txt, recursive=false, "
+        "limit=8. Le resultat du "
+        "listing determine le second appel : le nom active--<NEXT_TOOL>--... donne "
+        "l'outil 2 et son path. Pour cette lecture, utilise exactement "
+        "read_workspace_file avec path, offset=0 et max_characters=4096. N'invente "
+        "aucune donnee. Reponds uniquement par le JSON exact "
+        '{"target":"<TARGET obtenu>"}.',
+        "Deux acquisitions locales causales ; la cible opaque n'existe que dans le "
+        "fichier revele par le listing. Le score exige appels, arguments, ordre, "
+        "integration du resultat et JSON final exact.",
+        "tool",
+        expected_match=_contains(target),
+        expects_tool="list_workspace_files",
+        toolchain={
+            "pattern": "list-read",
+            "final_token": target,
+            "expected_calls": list(expected_calls),
+            "planted_files": [
+                {"path": active, "text": f"TARGET={target}\n"},
+                {"path": f"{directory}/archive-a.txt", "text": f"TARGET={distractor_a}\n"},
+                {"path": f"{directory}/archive-b.txt", "text": f"TARGET={distractor_b}\n"},
+            ],
+            "planted_documents": [],
+        },
+    )
+
+
+def _search_read_chain() -> OrchItem:
+    item_id = "orch-toolchain-search-read"
+    lookup = _opaque(f"{item_id}.lookup", "LOOKUP")
+    target = _opaque(f"{item_id}.target", "TARGET")
+    distractor_lookup = _opaque(f"{item_id}.distractor-lookup", "LOOKUP")
+    distractor_target = _opaque(f"{item_id}.distractor-target", "TARGET")
+    directory = f"orchestration/{item_id}"
+    pointer = f"{directory}/pointers.txt"
+    payload = f"{directory}/payload.txt"
+    decoy = f"{directory}/decoy.txt"
+    expected_calls = (
+        {
+            "tool_id": "search_files",
+            "arguments": {
+                "root_id": "workspace", "path": directory, "query": lookup,
+                "pattern": "*.txt", "recursive": False, "limit": 4,
+            },
+        },
+        {
+            "tool_id": "read_workspace_file",
+            "arguments": {"path": payload, "offset": 0, "max_characters": 4096},
+        },
+    )
+    return OrchItem(
+        item_id, "tool-chain", "chaine-outils",
+        "Execute une chaine factuelle en deux acquisitions. Recherche dans "
+        f"root_id=workspace, path={directory}, query={lookup}, pattern=*.txt, "
+        "recursive=false, limit=4. La ligne trouvee contient NEXT_TOOL et NEXT_PATH, "
+        "qui determinent le second appel. Utilise exactement read_workspace_file avec "
+        "path=NEXT_PATH, offset=0 et max_characters=4096. N'invente aucune donnee. "
+        'Reponds uniquement par le JSON exact {"target":"<TARGET obtenu>"}.',
+        "Deux acquisitions locales causales ; la recherche opaque revele le chemin "
+        "du seul fichier contenant la cible. Le score exige appels, arguments, ordre, "
+        "integration du resultat et JSON final exact.",
+        "tool",
+        expected_match=_contains(target),
+        expects_tool="search_files",
+        toolchain={
+            "pattern": "search-read",
+            "final_token": target,
+            "expected_calls": list(expected_calls),
+            "planted_files": [
+                {
+                    "path": pointer,
+                    "text": (
+                        f"LOOKUP={lookup} NEXT_TOOL=read_workspace_file NEXT_PATH={payload}\n"
+                        f"LOOKUP={distractor_lookup} NEXT_TOOL=read_workspace_file NEXT_PATH={decoy}\n"
+                    ),
+                },
+                {"path": payload, "text": f"TARGET={target}\n"},
+                {"path": decoy, "text": f"TARGET={distractor_target}\n"},
+            ],
+            "planted_documents": [],
+        },
+    )
 
 
 # Distracteurs plausibles reutilisables (bruit realiste entre l'etat et la sonde).
@@ -269,28 +389,8 @@ TESTSET: tuple[OrchItem, ...] = (
         ]},
     ),
     # ============================ TOOL-CHAIN (chaine-outils) ======================
-    OrchItem(
-        "orch-toolchain-orwell", "tool-chain", "chaine-outils",
-        "Qui a écrit le roman « 1984 », et en quelle année cet auteur est-il mort ?",
-        "Enchaînement : identifier George Orwell PUIS son année de mort (1950). core "
-        "choisit et enchaîne ; info et nu ne reçoivent AUCUN résultat d'avance.",
-        "tool",
-        expects_tool="web_search",
-        expected_match=_contains("1950"),
-        core_product={},
-        info_material={},
-    ),
-    OrchItem(
-        "orch-toolchain-saintex", "tool-chain", "chaine-outils",
-        "Qui a écrit « Le Petit Prince », et de quelle nationalité était cet auteur ?",
-        "Enchaînement : Antoine de Saint-Exupéry PUIS sa nationalité (française). core "
-        "enchaîne les acquisitions ; info et nu ne peuvent pas agir.",
-        "tool",
-        expects_tool="web_search",
-        expected_match=_contains("français"),
-        core_product={},
-        info_material={},
-    ),
+    _list_read_chain(),
+    _search_read_chain(),
 )
 
 
@@ -319,7 +419,30 @@ def validate_orch_item(item: object) -> OrchItem:
     if item.family == "tool-chain":
         if item.core_product or item.info_material:
             raise InvalidInput("orch: tool-chain sans core_product ni info_material.")
+        chain = item.toolchain
+        if set(chain) != {
+            "pattern", "final_token", "expected_calls",
+            "planted_files", "planted_documents",
+        }:
+            raise InvalidInput("orch: contrat tool-chain ferme requis.")
+        if chain["pattern"] not in {"list-read", "search-read"}:
+            raise InvalidInput("orch: patron tool-chain invalide.")
+        if (
+            not isinstance(chain["final_token"], str)
+            or not chain["final_token"]
+            or len(chain["expected_calls"]) != 2
+        ):
+            raise InvalidInput("orch: cible et deux appels tool-chain requis.")
+        if chain["final_token"] in item.prompt:
+            raise InvalidInput("orch: fuite de la cible tool-chain dans le prompt.")
+        if item.expects_tool != chain["expected_calls"][0].get("tool_id"):
+            raise InvalidInput("orch: premier outil attendu divergent.")
+        sources = (*chain["planted_files"], *chain["planted_documents"])
+        if sum(chain["final_token"] in source["text"] for source in sources) != 1:
+            raise InvalidInput("orch: cible tool-chain presente exactement une fois requise.")
     else:
+        if item.toolchain:
+            raise InvalidInput("orch: contrat tool-chain interdit hors famille.")
         if not item.core_product or not item.info_material:
             raise InvalidInput("orch: core_product et info_material requis (hors tool-chain).")
         if item.core_product == item.info_material:

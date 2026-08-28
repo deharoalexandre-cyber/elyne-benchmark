@@ -37,7 +37,7 @@ Seventeen items cover unassisted reasoning controls, memory, RAG, temporal facts
 
 ### Orchestration
 
-Fourteen items probe whether raw observations become usable through consolidation, revision, interruption recovery, real inter-session restart, memory selection, and tool-mediated acquisition. Tool cases do not credit direct arms for actions they cannot perform.
+Fourteen items probe whether raw observations become usable through consolidation, revision, interruption recovery, real inter-session restart, memory selection, and tool-mediated acquisition. In revision 2, both tool cases use opaque planted local data and the same six-dimensional exact matcher as the dedicated tool-chain family. Every arm is scored by that matcher; direct controls are not forced to fail by arm identity.
 
 ### Tool-chain
 
@@ -71,3 +71,7 @@ A result should be described as a replication only if the implementer publishes:
 
 Changing an item, matcher, decoding parameter, or model creates a new experiment and must receive new hashes.
 
+Recomputing a published report from its public JSON is a verification of the
+instrument and recorded observations. It is not a reconstruction of the private
+Elyne Next runtime, whose prompts, envelopes, journals, and binary proofs are
+deliberately outside this package.

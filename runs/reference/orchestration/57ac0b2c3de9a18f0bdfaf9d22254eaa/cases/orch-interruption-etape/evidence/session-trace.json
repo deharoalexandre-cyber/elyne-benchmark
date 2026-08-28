@@ -1,0 +1,1 @@
+{"core_setup_mode":"none","core_turn_ids":["orch-interruption-etape-prior-1","orch-interruption-etape-prior-3","orch-interruption-etape-core"],"interruption_observed":true,"item_id":"orch-interruption-etape","prior_source_messages":3,"prior_user_turns_executed":2,"schema":"elyne.eval.orchestration-session-trace/v1","session_restarts":0}

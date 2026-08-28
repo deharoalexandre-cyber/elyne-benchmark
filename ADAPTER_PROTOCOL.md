@@ -75,7 +75,7 @@ Direct controls must set `tools_declared=false` and return empty tool calls/trac
 
 For the `justesse` core, `surfaced_information` must be the exact structured material exposed to the model. The runner feeds that object to `gemma-info`. All other arms return `null` in this field. Every adapter echoes the supplied material commitment in `received_material_sha256`.
 
-Tool-chain core traces must preserve call order and include the exact tool identifier, arguments, completion outcome, canonical-argument hash, result hash, and the second-result target attestation. The frozen matcher remains the authority.
+Tool-chain core traces, including the two `orchestration` cases whose `case_type` is `tool`, must preserve call order and include the exact tool identifier, arguments, completion outcome, canonical-argument hash, result hash, and the second-result target attestation. The frozen matcher remains the authority. Direct controls submit empty traces to the same matcher; they are not assigned failure by convention.
 
 ## OpenAI-compatible direct controls
 
@@ -90,4 +90,3 @@ Required environment variables:
 Optional variables are `ELYNE_BENCH_API_KEY`, `ELYNE_BENCH_MAX_TOKENS` (default `1536`), and `ELYNE_BENCH_HTTP_TIMEOUT` (default `600`). The adapter uses temperature `0`, top-p `1`, seed `0`, and non-streamed chat completions.
 
 The core adapter and direct controls must compute the same sampling commitment. A full replication may replace this bundled adapter if its endpoint does not honor these fields, but must document the equivalent deterministic configuration.
-

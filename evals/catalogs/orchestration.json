@@ -1,9 +1,9 @@
 {
   "schema": "elyne.eval.probe-catalog/v1",
   "id": "orchestration",
-  "revision": 1,
+  "revision": 2,
   "status": "accepted",
-  "fixture_schemas": ["elyne.eval.fixture-orchestration/v1"],
+  "fixture_schemas": ["elyne.eval.fixture-orchestration/v2"],
   "isolation": {
     "source_access": "read-only",
     "snapshot_access": "read-only",
@@ -16,7 +16,7 @@
     "id": "orchestration.answer",
     "phase": "running",
     "handler_id": "probe-handler.orchestration.answer",
-    "fixture_schema": "elyne.eval.fixture-orchestration/v1",
+    "fixture_schema": "elyne.eval.fixture-orchestration/v2",
     "case_types": ["judge", "objective", "tool"],
     "timeout_seconds": 3600,
     "evidence": [

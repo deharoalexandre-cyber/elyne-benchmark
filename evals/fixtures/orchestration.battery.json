@@ -1,16 +1,16 @@
 {
-  "schema": "elyne.eval.fixture-orchestration/v1",
+  "schema": "elyne.eval.fixture-orchestration/v2",
   "id": "orchestration",
-  "revision": 1,
+  "revision": 2,
   "status": "accepted",
   "catalog": {
     "id": "orchestration",
-    "revision": 1,
-    "sha256": "0bb3213e92e8de8fd9a6ae3b2f5c0036486f1417b100f4156efca0d57870949d"
+    "revision": 2,
+    "sha256": "203b7f3e0de8bb0a09eb45a85587b97936c351a7a857cdb8030e32059cfd6f05"
   },
   "source": {
     "module": "elyne/bench/orchestration_testset.py",
-    "sha256": "041dc1691c1cf49853e0901f4c8311dc39d2023ab1a0d9d2c5d0b1055b6aed22"
+    "sha256": "d7f59f8240ed1441b552dcea687b21309c23dbdcba74013ef49d275ec303b961"
   },
   "cases": [
     {
@@ -38,7 +38,8 @@
           "Le lundi, il y a un seul service en plus qui tourne par rapport aux autres jours.",
           "Ce service suppl\u00e9mentaire du lundi, c'est celui de sauvegarde, appel\u00e9 BackuNode."
         ]
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-consolidation-serveur",
@@ -66,7 +67,8 @@
           "Les logs montrent une temp\u00e9rature anormale sur srv-07.",
           "Les trois incidents de la semaine ont tous touch\u00e9 srv-07."
         ]
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-interruption-blocs",
@@ -103,7 +105,8 @@
           }
         ],
         "interrupted": true
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-interruption-etape",
@@ -140,7 +143,8 @@
           }
         ],
         "interrupted": true
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-intersession-coffre",
@@ -177,7 +181,8 @@
           }
         ],
         "session_break_after": 3
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-intersession-module",
@@ -214,7 +219,8 @@
           }
         ],
         "session_break_after": 3
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-multitour-calcul",
@@ -278,7 +284,8 @@
             "text": "Le Danube."
           }
         ]
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-multitour-dossier",
@@ -342,7 +349,8 @@
             "text": "Le Danube."
           }
         ]
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-revision-cle",
@@ -368,7 +376,8 @@
           "Ma cl\u00e9 d'acc\u00e8s commence par AK-21.",
           "Je l'ai r\u00e9g\u00e9n\u00e9r\u00e9e depuis : maintenant elle commence par ZR-88, l'ancienne AK-21 est morte."
         ]
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-revision-port",
@@ -394,7 +403,8 @@
           "Mon serveur \u00e9coute sur le port 8080.",
           "Finalement j'ai migr\u00e9 la conf : maintenant c'est le port 9091, oublie le 8080."
         ]
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-selection-codes",
@@ -422,7 +432,8 @@
           "Le code du wifi, c'est 8853.",
           "Et le code de la cave, c'est 1109."
         ]
-      }
+      },
+      "toolchain": {}
     },
     {
       "id": "orch-selection-rdv",
@@ -449,45 +460,124 @@
           "Le rendez-vous avec le notaire, c'est jeudi.",
           "Et mon cours de sport, c'est samedi."
         ]
+      },
+      "toolchain": {}
+    },
+    {
+      "id": "orch-toolchain-list-read",
+      "probe_id": "orchestration.answer",
+      "case_type": "tool",
+      "timeout_seconds": 3600,
+      "family": "tool-chain",
+      "property": "chaine-outils",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Commence exactement avec list_workspace_files, path=orchestration/orch-toolchain-list-read, pattern=*.txt, recursive=false, limit=8. Le resultat du listing determine le second appel : le nom active--<NEXT_TOOL>--... donne l'outil 2 et son path. Pour cette lecture, utilise exactement read_workspace_file avec path, offset=0 et max_characters=4096. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "just_signal": "Deux acquisitions locales causales ; la cible opaque n'existe que dans le fichier revele par le listing. Le score exige appels, arguments, ordre, integration du resultat et JSON final exact.",
+      "expected_match": {
+        "mode": "contains",
+        "value": "TARGET-0D081B86AAC9",
+        "normalization": "unicode-nfc-trim/v1",
+        "case_sensitive": false
+      },
+      "expects_tool": "list_workspace_files",
+      "core_product": {},
+      "info_material": {},
+      "toolchain": {
+        "pattern": "list-read",
+        "final_token": "TARGET-0D081B86AAC9",
+        "expected_calls": [
+          {
+            "tool_id": "list_workspace_files",
+            "arguments": {
+              "path": "orchestration/orch-toolchain-list-read",
+              "pattern": "*.txt",
+              "recursive": false,
+              "limit": 8
+            }
+          },
+          {
+            "tool_id": "read_workspace_file",
+            "arguments": {
+              "path": "orchestration/orch-toolchain-list-read/active--read_workspace_file--SEL-AE81D1F32C08.txt",
+              "offset": 0,
+              "max_characters": 4096
+            }
+          }
+        ],
+        "planted_files": [
+          {
+            "path": "orchestration/orch-toolchain-list-read/active--read_workspace_file--SEL-AE81D1F32C08.txt",
+            "text": "TARGET=TARGET-0D081B86AAC9\n"
+          },
+          {
+            "path": "orchestration/orch-toolchain-list-read/archive-a.txt",
+            "text": "TARGET=TARGET-C71CF8251320\n"
+          },
+          {
+            "path": "orchestration/orch-toolchain-list-read/archive-b.txt",
+            "text": "TARGET=TARGET-E801F97CABC9\n"
+          }
+        ],
+        "planted_documents": []
       }
     },
     {
-      "id": "orch-toolchain-orwell",
+      "id": "orch-toolchain-search-read",
       "probe_id": "orchestration.answer",
       "case_type": "tool",
       "timeout_seconds": 3600,
       "family": "tool-chain",
       "property": "chaine-outils",
-      "prompt": "Qui a \u00e9crit le roman \u00ab 1984 \u00bb, et en quelle ann\u00e9e cet auteur est-il mort ?",
-      "just_signal": "Encha\u00eenement : identifier George Orwell PUIS son ann\u00e9e de mort (1950). core choisit et encha\u00eene ; info et nu ne re\u00e7oivent AUCUN r\u00e9sultat d'avance.",
+      "prompt": "Execute une chaine factuelle en deux acquisitions. Recherche dans root_id=workspace, path=orchestration/orch-toolchain-search-read, query=LOOKUP-E90B70B073A8, pattern=*.txt, recursive=false, limit=4. La ligne trouvee contient NEXT_TOOL et NEXT_PATH, qui determinent le second appel. Utilise exactement read_workspace_file avec path=NEXT_PATH, offset=0 et max_characters=4096. N'invente aucune donnee. Reponds uniquement par le JSON exact {\"target\":\"<TARGET obtenu>\"}.",
+      "just_signal": "Deux acquisitions locales causales ; la recherche opaque revele le chemin du seul fichier contenant la cible. Le score exige appels, arguments, ordre, integration du resultat et JSON final exact.",
       "expected_match": {
         "mode": "contains",
-        "value": "1950",
+        "value": "TARGET-DC47D64C95CB",
         "normalization": "unicode-nfc-trim/v1",
         "case_sensitive": false
       },
-      "expects_tool": "web_search",
+      "expects_tool": "search_files",
       "core_product": {},
-      "info_material": {}
-    },
-    {
-      "id": "orch-toolchain-saintex",
-      "probe_id": "orchestration.answer",
-      "case_type": "tool",
-      "timeout_seconds": 3600,
-      "family": "tool-chain",
-      "property": "chaine-outils",
-      "prompt": "Qui a \u00e9crit \u00ab Le Petit Prince \u00bb, et de quelle nationalit\u00e9 \u00e9tait cet auteur ?",
-      "just_signal": "Encha\u00eenement : Antoine de Saint-Exup\u00e9ry PUIS sa nationalit\u00e9 (fran\u00e7aise). core encha\u00eene les acquisitions ; info et nu ne peuvent pas agir.",
-      "expected_match": {
-        "mode": "contains",
-        "value": "fran\u00e7ais",
-        "normalization": "unicode-nfc-trim/v1",
-        "case_sensitive": false
-      },
-      "expects_tool": "web_search",
-      "core_product": {},
-      "info_material": {}
+      "info_material": {},
+      "toolchain": {
+        "pattern": "search-read",
+        "final_token": "TARGET-DC47D64C95CB",
+        "expected_calls": [
+          {
+            "tool_id": "search_files",
+            "arguments": {
+              "root_id": "workspace",
+              "path": "orchestration/orch-toolchain-search-read",
+              "query": "LOOKUP-E90B70B073A8",
+              "pattern": "*.txt",
+              "recursive": false,
+              "limit": 4
+            }
+          },
+          {
+            "tool_id": "read_workspace_file",
+            "arguments": {
+              "path": "orchestration/orch-toolchain-search-read/payload.txt",
+              "offset": 0,
+              "max_characters": 4096
+            }
+          }
+        ],
+        "planted_files": [
+          {
+            "path": "orchestration/orch-toolchain-search-read/pointers.txt",
+            "text": "LOOKUP=LOOKUP-E90B70B073A8 NEXT_TOOL=read_workspace_file NEXT_PATH=orchestration/orch-toolchain-search-read/payload.txt\nLOOKUP=LOOKUP-7C2FAED26A77 NEXT_TOOL=read_workspace_file NEXT_PATH=orchestration/orch-toolchain-search-read/decoy.txt\n"
+          },
+          {
+            "path": "orchestration/orch-toolchain-search-read/payload.txt",
+            "text": "TARGET=TARGET-DC47D64C95CB\n"
+          },
+          {
+            "path": "orchestration/orch-toolchain-search-read/decoy.txt",
+            "text": "TARGET=TARGET-22F691F3762F\n"
+          }
+        ],
+        "planted_documents": []
+      }
     }
   ]
 }

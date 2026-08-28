@@ -24,3 +24,17 @@ A later authority ambiguity between generic text reading and workspace reading w
 
 The public verifier recomputes scores from the frozen matcher and evidence. A cosmetically cleaned report is therefore insufficient: the committed inputs and traces must agree.
 
+## v4 - orchestration general-knowledge leak
+
+The orchestration cases about Orwell and Saint-Exupéry were answerable from
+general knowledge and therefore could not isolate acquisition. The v1 harness
+also checked only one tool name plus a substring, not the complete chain. Both
+items were replaced by opaque planted `list-read` and `search-read` chains, and
+orchestration revision 2 adopted the frozen six-dimensional matcher.
+
+The first v2 campaign scored `13/14`: the model called the declared runtime tool
+`list_workspace_files`, while the case expected the obsolete `list_files`
+interface with a `root_id`. The exact matcher correctly rejected it. After the
+contract was aligned to the real declared tool, the complete campaign was
+replayed and scored `14/14 · 12/14 · 0/14`. The failed campaign was retained in
+the originating repository rather than edited into a success.

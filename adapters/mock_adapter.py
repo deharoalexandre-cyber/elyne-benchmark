@@ -26,9 +26,12 @@ def main() -> int:
     family, subject, case = request["family"], request["subject_id"], request["case"]
     response = "SMOKE-NO-MATCH"
     calls, trace = [], []
-    if family == "toolchain" and subject == "core-origin":
-        response = json.dumps({"target": case["final_token"]}, separators=(",", ":"))
-        for ordinal, expected in enumerate(case["expected_calls"], 1):
+    if family in {"orchestration", "toolchain"} and subject == "core-origin" and (
+        family == "toolchain" or case.get("case_type") == "tool"
+    ):
+        chain = case if family == "toolchain" else case["toolchain"]
+        response = json.dumps({"target": chain["final_token"]}, separators=(",", ":"))
+        for ordinal, expected in enumerate(chain["expected_calls"], 1):
             args = expected["arguments"]
             trace.append({
                 "ordinal": ordinal,
@@ -70,4 +73,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

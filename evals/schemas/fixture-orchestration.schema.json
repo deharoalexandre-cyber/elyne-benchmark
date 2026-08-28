@@ -1,31 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "elyne.eval.fixture-orchestration/v1",
+  "$id": "elyne.eval.fixture-orchestration/v2",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "id", "revision", "status", "catalog", "source", "cases"],
   "properties": {
-    "schema": {"const": "elyne.eval.fixture-orchestration/v1"},
+    "schema": {"const": "elyne.eval.fixture-orchestration/v2"},
     "id": {"const": "orchestration"},
-    "revision": {"const": 1},
+    "revision": {"const": 2},
     "status": {"enum": ["proposed", "accepted", "frozen"]},
     "catalog": {"$ref": "#/$defs/catalog"},
     "source": {"$ref": "#/$defs/source"},
     "cases": {"type": "array", "minItems": 1, "maxItems": 64, "items": {"$ref": "#/$defs/case"}}
   },
   "$defs": {
-    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "identifier": {"type": "string", "pattern": "^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$"},
     "text": {"type": "string", "minLength": 1, "maxLength": 65536},
     "catalog": {
       "type": "object", "additionalProperties": false,
       "required": ["id", "revision", "sha256"],
-      "properties": {"id": {"const": "orchestration"}, "revision": {"const": 1}, "sha256": {"$ref": "#/$defs/sha256"}}
+      "properties": {
+        "id": {"const": "orchestration"}, "revision": {"const": 2},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
     },
     "source": {
       "type": "object", "additionalProperties": false,
       "required": ["module", "sha256"],
-      "properties": {"module": {"const": "elyne/bench/orchestration_testset.py"}, "sha256": {"$ref": "#/$defs/sha256"}}
+      "properties": {
+        "module": {"const": "elyne/bench/orchestration_testset.py"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
     },
     "expectedMatch": {
       "type": "object", "additionalProperties": false,
@@ -49,9 +55,43 @@
       },
       "dependentRequired": {"session_break_after": ["prior_turns"], "interrupted": ["prior_turns"]}
     },
+    "toolCall": {
+      "type": "object", "additionalProperties": false,
+      "required": ["tool_id", "arguments"],
+      "properties": {
+        "tool_id": {"$ref": "#/$defs/identifier"},
+        "arguments": {"type": "object"}
+      }
+    },
+    "plantedFile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "text"],
+      "properties": {"path": {"$ref": "#/$defs/text"}, "text": {"$ref": "#/$defs/text"}}
+    },
+    "plantedDocument": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "text"],
+      "properties": {"name": {"$ref": "#/$defs/text"}, "text": {"$ref": "#/$defs/text"}}
+    },
+    "toolchain": {
+      "oneOf": [
+        {"type": "object", "maxProperties": 0},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["pattern", "final_token", "expected_calls", "planted_files", "planted_documents"],
+          "properties": {
+            "pattern": {"enum": ["list-read", "search-read"]},
+            "final_token": {"type": "string", "pattern": "^TARGET-[A-F0-9]{12}$"},
+            "expected_calls": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/toolCall"}},
+            "planted_files": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"$ref": "#/$defs/plantedFile"}},
+            "planted_documents": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/plantedDocument"}}
+          }
+        }
+      ]
+    },
     "case": {
       "type": "object", "additionalProperties": false,
-      "required": ["id", "probe_id", "case_type", "timeout_seconds", "family", "property", "prompt", "just_signal", "expected_match", "expects_tool", "core_product", "info_material"],
+      "required": ["id", "probe_id", "case_type", "timeout_seconds", "family", "property", "prompt", "just_signal", "expected_match", "expects_tool", "core_product", "info_material", "toolchain"],
       "properties": {
         "id": {"$ref": "#/$defs/identifier"}, "probe_id": {"const": "orchestration.answer"},
         "case_type": {"enum": ["objective", "tool", "judge"]},
@@ -61,7 +101,8 @@
         "prompt": {"$ref": "#/$defs/text"}, "just_signal": {"$ref": "#/$defs/text"},
         "expected_match": {"oneOf": [{"$ref": "#/$defs/expectedMatch"}, {"type": "null"}]},
         "expects_tool": {"oneOf": [{"$ref": "#/$defs/identifier"}, {"type": "null"}]},
-        "core_product": {"type": "object"}, "info_material": {"$ref": "#/$defs/infoMaterial"}
+        "core_product": {"type": "object"}, "info_material": {"$ref": "#/$defs/infoMaterial"},
+        "toolchain": {"$ref": "#/$defs/toolchain"}
       }
     }
   }

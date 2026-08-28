@@ -30,6 +30,15 @@ class PublicRunnerTests(unittest.TestCase):
                     self.assertEqual(report["status"], "completed")
                     self.assertEqual(report["overall"]["successes"], successes)
                     self.assertTrue(all(report["fairness"].values()))
+                    if family == "orchestration":
+                        chains = [
+                            item for item in report["items"]
+                            if item["scoring"] == "tool"
+                        ]
+                        self.assertEqual(2, len(chains))
+                        for item in chains:
+                            self.assertTrue(all(item["core_origin"]["dimensions"].values()))
+                            self.assertFalse(item["gemma_info"]["dimensions"]["causal_order"])
 
     def test_existing_campaign_is_never_overwritten(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

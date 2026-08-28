@@ -21,7 +21,7 @@ An adapter must attest one identical `binding_sha256` and one identical `samplin
 | Family | Cases | What it probes | Reference result (`core / info / bare`) |
 |---|---:|---|---:|
 | `justesse` | 17 | reasoning controls, memory, RAG, time, tools | `15/15 · 14/15 · 6/15` on objectively scored items; 2 judge items pending |
-| `orchestration` | 14 | consolidation, revision, interruption, inter-session persistence, selection, tool use | `13/14 · 12/14 · 0/14` |
+| `orchestration` | 14 | consolidation, revision, interruption, inter-session persistence, selection, exact causal tool chains | `14/14 · 12/14 · 0/14` |
 | `toolchain` | 15 | exact two-step acquisition chains with opaque targets | `15/15 · 0/15 · 0/15` |
 
 These are reference observations from one deterministic campaign, not universal performance estimates. See [LIMITATIONS.md](LIMITATIONS.md).
@@ -72,10 +72,10 @@ Outputs are written under `runs/local/` and are never silently overwritten.
 |---|---|
 | Frozen tool-chain matcher | `56736f207a207dc04b5262996160c54d367be4e99f0d670adc700a3d61317260` |
 | Justesse battery | `8c4dc5b71c668c7d272cb1cc5003d1dc1692a0a08565e79c9c75d8f354eebbdc` |
-| Orchestration battery | `2a9ccb875da2becfdee49947dc018e3c04f8132ae7bfac6d01d962244aa8191b` |
+| Orchestration battery | `f3c8928b94224c589641a456c5f731578560c4498099a34ef735a6eae29597d7` |
 | Tool-chain battery | `acd16d43554595d0df497853ebf3d086da6f7e0b8d0a1d6336bc8adcd4c10e4a` |
 | Justesse reference report | `05be9255c66542c35d784eea1eda092153d2378c23f4f53bd2edf812a1b59f84` |
-| Orchestration reference report | `7d323969f58bbe2f027bc23164abfea07a7566caba38981637a0745a2da7342b` |
+| Orchestration reference report | `c98be9d4dc5062cab66ddbf165ce2d3d23519616264fd1d0603edb540e907bba` |
 | Tool-chain reference report | `14931ee92528780b2436ce530c8d43094d098a9d37e1e8a8064400d107bffb96` |
 
 ## Reading order

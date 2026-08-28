@@ -1,0 +1,1 @@
+{"core_setup_mode":"none","core_turn_ids":["orch-intersession-coffre-prior-1","orch-intersession-coffre-prior-3","orch-intersession-coffre-core"],"interruption_observed":false,"item_id":"orch-intersession-coffre","prior_source_messages":3,"prior_user_turns_executed":2,"schema":"elyne.eval.orchestration-session-trace/v1","session_restarts":1}

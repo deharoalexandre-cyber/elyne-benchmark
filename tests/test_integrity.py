@@ -11,7 +11,7 @@ class FrozenArtifactTests(unittest.TestCase):
     def test_reference_runs_reverify(self) -> None:
         expected = {
             "justesse": "05be9255c66542c35d784eea1eda092153d2378c23f4f53bd2edf812a1b59f84",
-            "orchestration": "7d323969f58bbe2f027bc23164abfea07a7566caba38981637a0745a2da7342b",
+            "orchestration": "c98be9d4dc5062cab66ddbf165ce2d3d23519616264fd1d0603edb540e907bba",
             "toolchain": "14931ee92528780b2436ce530c8d43094d098a9d37e1e8a8064400d107bffb96",
         }
         for family, report_hash in expected.items():
@@ -33,6 +33,20 @@ class FrozenArtifactTests(unittest.TestCase):
         self.assertFalse(normalized_exact_target('{"target":"TARGET-ABC","note":"ok"}', "TARGET-ABC"))
         self.assertFalse(normalized_exact_target('{"target":"bad","target":"TARGET-ABC"}', "TARGET-ABC"))
 
+    def test_orchestration_v2_contains_only_opaque_tool_chains(self) -> None:
+        from elyne_benchmark.common import load_battery
+
+        battery, _ = load_battery("orchestration")
+        self.assertEqual(2, battery["revision"])
+        cases = [case for case in battery["cases"] if case["case_type"] == "tool"]
+        self.assertEqual(
+            {"orch-toolchain-list-read", "orch-toolchain-search-read"},
+            {case["id"] for case in cases},
+        )
+        for case in cases:
+            self.assertEqual(2, len(case["toolchain"]["expected_calls"]))
+            self.assertNotIn(case["toolchain"]["final_token"], case["prompt"])
+
     def test_release_manifest_covers_every_public_file(self) -> None:
         result = verify_release_manifest()
         self.assertGreater(result["files"], 100)
@@ -40,4 +54,3 @@ class FrozenArtifactTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

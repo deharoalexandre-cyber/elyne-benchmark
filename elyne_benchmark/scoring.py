@@ -17,6 +17,7 @@ def _scored_standard(family: str, case: Mapping[str, Any], observation: Mapping[
     response = observation["response_text"]
     grounded = None
     expected_tool_called = None
+    dimensions = None
     passed = None
     if case["case_type"] == "objective":
         rule = "expected-match"
@@ -26,9 +27,24 @@ def _scored_standard(family: str, case: Mapping[str, Any], observation: Mapping[
         if family == "justesse" and subject == "gemma-info":
             rule = "grounding-only"
             passed = grounded if completed else None
-        elif family == "orchestration" and subject != "core-origin":
-            rule = "action-unavailable"
-            passed = False if completed else None
+        elif family == "orchestration":
+            rule = "causal-tool-chain/v1"
+            trace = observation["tool_trace"]
+            chain = case["toolchain"]
+            dimensions = score_toolchain(
+                response_text=response,
+                trace=trace,
+                expected_calls=chain["expected_calls"],
+                final_token=chain["final_token"],
+                tool_2_contains_target=(
+                    len(trace) >= 2 and trace[1].get("target_line_attested") is True
+                ),
+            ) if completed else {name: False for name in DIMENSIONS}
+            expected_tool_called = bool(
+                dimensions["tool_1_selection"] and dimensions["tool_2_selection"]
+            ) if completed else None
+            grounded = dimensions["final_accuracy"] if completed else None
+            passed = all(dimensions.values()) if completed else None
         else:
             rule = "tool-call-plus-grounding"
             expected_tool_called = case["expects_tool"] in observation["tool_calls"] if completed else None
@@ -44,9 +60,11 @@ def _scored_standard(family: str, case: Mapping[str, Any], observation: Mapping[
         "response_text": response,
         "response_sha256": sha256_hex(response.encode("utf-8")) if isinstance(response, str) else None,
         "tool_calls": observation["tool_calls"],
+        "tool_trace": observation["tool_trace"],
         "scoring_rule": rule,
         "expected_tool_called": expected_tool_called,
         "grounded": grounded,
+        "dimensions": dimensions,
         "passed": passed,
         "binding_sha256": observation["binding_sha256"],
         "sampling_sha256": observation["sampling_sha256"],
@@ -157,4 +175,3 @@ def build_replication_report(
         "groups": [_aggregate([item for item in items if item["group"] == group], group=group, toolchain=family == "toolchain") for group in groups],
         "overall": _aggregate(items, group="all", toolchain=family == "toolchain"),
     }
-
